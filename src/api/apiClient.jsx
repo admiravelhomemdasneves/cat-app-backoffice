@@ -33,10 +33,10 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        /*if (error.response && (error.response.status === 401 || error.response.status === 403)) {
           // Redirect on authentication failure
           this.redirectToLogin();
-        }
+        }*/
         return Promise.reject(error);
       }
     );
