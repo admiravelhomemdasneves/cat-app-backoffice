@@ -49,5 +49,6 @@
   "devDependencies": {
     "eslint-config-react-app": "^7.0.1",
     "react-scripts": "^5.0.1"
-  }
+  },
+  "homepage": "/login"
 }
