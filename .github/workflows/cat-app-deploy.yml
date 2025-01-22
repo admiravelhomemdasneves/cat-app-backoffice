@@ -1,0 +1,48 @@
+name: Deploy to Azure CI/CD
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+    NODE_VERSION: '18.x'
+
+permissions:
+    contents: read
+    id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.GITHUB_TOKEN.AZUREAPPSERVICE_CLIENTID_E514F145D8B74D42AC87B7D9ECCC9F9B }}
+          tenant-id: ${{ secrets.GITHUB_TOKEN.AZUREAPPSERVICE_TENANTID_B212564628754A06BD4FB05BC8D1C5D6 }}
+          subscription-id: ${{ secrets.GITHUB_TOKEN.AZUREAPPSERVICE_SUBSCRIPTIONID_5B63800957E3424EA0BA6AF602C9FC80 }}
+
+      - name: Deploy to Azure
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: Cat-App-Backoffice
+          package: build
