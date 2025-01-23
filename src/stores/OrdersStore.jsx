@@ -66,6 +66,10 @@ const OrdersStore = {
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
       valueFormatter: (params) => {
+        if (!params || params === undefined || params === null) {
+          return ""; // Return a fallback display value
+        }
+
         const { value } = params;
 
         if (value !== null) {
@@ -81,7 +85,6 @@ const OrdersStore = {
             });
           }
         }
-        return "";
       },
     },
     {
