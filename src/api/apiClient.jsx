@@ -22,7 +22,7 @@ class ApiClient {
           config.headers.Authorization = `Bearer ${token}`;
         } else {
           if (!config.url.startsWith(`${this.baseURL}/auth/`))  {
-            this.redirectToLogin();
+            //this.redirectToLogin();
           }
         }
         return config;
