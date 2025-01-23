@@ -20,6 +20,7 @@ const LoginPage = () => {
     const handleSubmit = async () => {
         try {
             const response = await apiClient.post(Services.POST_LOGIN, JSON.stringify({ username, password }));
+            console.log("response: ", response);
             const accessToken = response?.data?.token;
             if (response?.status === 200 && accessToken !== null) { 
                 apiClient.setAuthToken(accessToken); 
