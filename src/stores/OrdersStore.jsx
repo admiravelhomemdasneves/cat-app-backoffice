@@ -67,16 +67,19 @@ const OrdersStore = {
       valueGetter: ({ value }) => value && new Date(value),
       valueFormatter: (params) => {
         const { value } = params;
-        if (value instanceof Date) {
-          return value.toLocaleString("en-US", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false,
-          });
+
+        if (value !== null) {
+          if (value instanceof Date) {
+            return value.toLocaleString("en-US", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: false,
+            });
+          }
         }
         return "";
       },
