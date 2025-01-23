@@ -21,8 +21,9 @@ class ApiClient {
         if (token && token !== "undefined" && token !== "null") {
           config.headers.Authorization = `Bearer ${token}`;
         } else {
-          // Redirect if token is missing or invalid
-          this.redirectToLogin();
+          if (!config.url.startsWith(`${this.baseURL}/auth/`))  {
+            this.redirectToLogin();
+          }
         }
         return config;
       },
