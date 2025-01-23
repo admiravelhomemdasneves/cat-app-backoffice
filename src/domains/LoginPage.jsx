@@ -13,7 +13,6 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (success) {
-            console.log("Navigating");
             navigate("/");
         }
     }, [success]);
@@ -21,7 +20,6 @@ const LoginPage = () => {
     const handleSubmit = async () => {
         try {
             const response = await apiClient.post(Services.POST_LOGIN, JSON.stringify({ username, password }));
-            console.log("response: ", response);
             const accessToken = response?.data?.token;
             if (accessToken !== null) { 
                 apiClient.setAuthToken(accessToken); 
