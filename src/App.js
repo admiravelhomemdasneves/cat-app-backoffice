@@ -4,15 +4,15 @@ import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
-import ContactsPage from './domains/ContactsPage';
-import DashboardPage from './domains/DashboardPage';
-import ProductsPage from './domains/ProductsPage';
-import OrderStatusPage from './domains/OrderStatusPage';
-import OrderPriorityPage from './domains/OrderPriorityPage';
-import PrintingServicePage from './domains/PrintingServicePage';
-import OrdersPage from './domains/OrdersPage';
-import OrderDetailsPage from './domains/OrderDetailsPage';
-import LoginPage from './domains/LoginPage';
+import ContactsPage from './pages/ContactsPage';
+import DashboardPage from './pages/DashboardPage';
+import ProductsPage from './pages/ProductsPage';
+import OrderStatusPage from './pages/OrderStatusPage';
+import OrderPriorityPage from './pages/OrderPriorityPage';
+import PrintingServicePage from './pages/PrintingServicePage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
+import LoginPage from './pages/LoginPage';
+import OrdersPage from './pages/orders/OrdersPage';
 
 function App() {
   const [theme, colorMode] = useMode();

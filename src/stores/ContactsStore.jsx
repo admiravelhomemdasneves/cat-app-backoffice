@@ -37,29 +37,28 @@ const ContactsStore = {
         },
         { field: "city", headerName: "CITY", flex: 1, editable: true },
         { field: "country", headerName: "COUNTRY", flex: 1, editable: true },
+        { field: "flagActive", headerName: "ACTIVE", flex: 1, editable: false },
     ],
 
     visibilityModel: {
-        "id_contact" : false
+        "id_contact" : false,
+        "flagActive" : false
     },
 
     idField : "id_contact",
 
-    sampleRow : { id_contact: randomInt(), first_name: "", last_name: "", street: "", door_number: "", zip_code: "", city: "", country: ""},
+    sampleRow : { id_contact: randomInt(), first_name: "", last_name: "", street: "", door_number: "", zip_code: "", city: "", country: "", flagActive: true},
 
     GetContacts: async (setData) => {
-        //const result = await Services.FindAllRequest(Services.GET_ALL_CONTACTS);
         const result = await apiClient.get(Services.GET_ALL_CONTACTS, null);
         setData(result);
     },
     
     DeleteContact: async (id) => {
-        //await Services.DeleteRequest(Services.DELETE_ID_CONTACT, id);
-        await apiClient.delete(Services.DELETE_ID_CONTACT + `/${id}`);
+        await apiClient.get(Services.INACTIVATE_CONTACT + `/${id}`);
     },
 
     SaveContact: async (updatedRow) => {
-        //await Services.SaveRequest(Services.PUT_ID_CONTACT, updatedRow);
         await apiClient.put(Services.PUT_ID_CONTACT, updatedRow);
     },
 }
