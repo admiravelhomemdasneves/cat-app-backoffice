@@ -1,6 +1,6 @@
 import React from "react";
 import PrintingServiceStore from "../stores/PrintingServiceStore";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/OLD_DataTable";
 
 const PrintingServicePage = () => {
   return (

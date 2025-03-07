@@ -1,6 +1,5 @@
 import { randomInt } from "@mui/x-data-grid-generator";
 import Services from "../api/services";
-import { Box } from "@mui/material";
 import Link from '@mui/material/Link';
 import apiClient from "../api/apiClient";
 
@@ -86,18 +85,6 @@ const OrdersStore = {
           }
         }
       },
-    },
-    {
-      field: "other",
-      headerName: "OTHER",
-      flex: 1,
-      filterable: false,
-      hideable: false,
-      renderCell: ({row}) => {
-        return (
-          <Box>Ok!</Box>
-        )
-      }
     }
   ],
 
@@ -110,15 +97,15 @@ const OrdersStore = {
   sampleRow: { id_order: randomInt(), name: "", description: "", orderStatus: "", contact: "", orderPriority: "", date_requested: ""},
 
   GetOrder: async (setData) => {
-    //const result = await Services.FindAllRequest(Services.GET_ALL_ORDERS);
     const result = await apiClient.get(Services.GET_ALL_ORDERS, null);
     
     // Transform each object to its Id
-    const newResult = result.map((item) => ({
+    const newResult = result.map((item) => (      {
       ...item,
       contact: item.contact ? item.contact.id_contact : null,
       orderStatus: item.orderStatus ? item.orderStatus.id_status : null,
       orderPriority: item.orderPriority ? item.orderPriority.id_priority : null,
+      orderProducts: null
     }));
 
     console.log("NEW RESULT", newResult);
@@ -126,12 +113,10 @@ const OrdersStore = {
   },
 
   DeleteOrder: async (id) => {
-    //await Services.DeleteRequest(Services.DELETE_ID_ORDER, id);
     await apiClient.delete(Services.DELETE_ID_ORDER + `/${id}`);
   },
 
   SaveOrder: async (updatedRow) => {
-    //await Services.SaveRequest(Services.PUT_ID_ORDER, updatedRow);
     await apiClient.put(Services.PUT_ID_ORDER, updatedRow);
   },
 };

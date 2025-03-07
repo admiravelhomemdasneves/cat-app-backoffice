@@ -1,6 +1,6 @@
 import React from "react";
 import ProductsStore from "../stores/ProductsStore";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/OLD_DataTable";
 //import { useGetProducts, useGetProductById, usePostProduct, usePutProduct, useDeleteProduct } from "../services/productService";
 //import productEntity from "../entities/productEntity";
 

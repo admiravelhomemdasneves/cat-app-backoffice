@@ -1,6 +1,6 @@
 import React from "react";
 import OrderStatusStore from "../stores/OrderStatusStore";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/OLD_DataTable";
 
 const OrderStatusPage = () => {
   return (

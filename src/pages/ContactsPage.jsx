@@ -1,6 +1,6 @@
 import React from "react";
 import ContactsStore from "../stores/ContactsStore";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/OLD_DataTable";
 
 const ContactsPage = () => {
   return (

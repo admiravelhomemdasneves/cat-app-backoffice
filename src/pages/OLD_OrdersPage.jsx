@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Services from "../api/services";
 import OrdersStore from "../stores/OrdersStore";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/OLD_DataTable";
 import apiClient from "../api/apiClient";
 
 const OrdersPage = () => {

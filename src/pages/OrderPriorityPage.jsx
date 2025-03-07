@@ -1,6 +1,6 @@
 import React from "react";
 import OrderPriorityStore from "../stores/OrderPriorityStore";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/OLD_DataTable";
 
 const OrderPriorityPage = () => {
   return (
