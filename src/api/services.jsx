@@ -15,6 +15,7 @@ const Services = {
   GET_ID_ORDER_PRODUCT : `/orderProduct`,
   DELETE_ID_ORDER_PRODUCT : `/orderProduct`,
   PUT_ID_ORDER_PRODUCT : `/orderProduct`,
+  ORDER_PRODUCT_INACTIVATE : `/orderProduct/inactivate`,
 
   GET_ALL_ORDER_PRODUCTS_SPECS : `/orderProductSpecs`,
   GET_ID_ORDER_PRODUCT_SPECS : `/orderProductSpecs`,

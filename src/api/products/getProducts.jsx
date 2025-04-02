@@ -2,12 +2,12 @@ import apiClient from "../apiClient";
 import { useQuery } from "@tanstack/react-query";
 import Services from "../services";
 
-export const useGetOrders = () => {
+export const useGetProducts = () => {
     const { isPending, error, data } = useQuery({
-        queryKey: ['orders'],
+        queryKey: ['products'],
         queryFn: async () => {
-            const response = await apiClient.get(Services.GET_ALL_ORDERS);
-            return response;
+        const response = await apiClient.get(Services.GET_ALL_PRODUCTS);
+        return response;
     }})
 
     if (!isPending && !error && data) return data;
