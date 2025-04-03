@@ -15,8 +15,8 @@ import LoginPage from './pages/LoginPage';
 import OrdersPage from './pages/orders/OrdersPage';
 
 function App() {
-  const [theme, colorMode] = useMode();
   const queryClient = new QueryClient();
+  const [theme, colorMode] = useMode();
 
   return (
     <QueryClientProvider client={queryClient}>

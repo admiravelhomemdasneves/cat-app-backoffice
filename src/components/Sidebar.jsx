@@ -7,7 +7,6 @@ import { tokens } from "../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import CategoryIcon from '@mui/icons-material/Category';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -128,7 +127,7 @@ const Sidebar = () => {
                     color={colors.grey[300]}
                     sx={{ m: "15px 0 5px 20px" }}
                 >
-                    Data
+                    Management
                 </Typography>
             )}
 
@@ -139,23 +138,6 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
-            <Item
-                title="Orders History"
-                to="/ordersHistory"
-                icon={<TimelineOutlinedIcon/>}
-                selected={selected}
-                setSelected={setSelected}
-            />
-
-            {!isCollapsed && (
-                <Typography
-                    variant="h6"
-                    color={colors.grey[300]}
-                    sx={{ m: "15px 0 5px 20px" }}
-                >
-                    People
-                </Typography>
-            )}
 
             <Item
                 title="Contacts"
@@ -164,16 +146,6 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
-
-            {!isCollapsed && (
-                <Typography
-                    variant="h6"
-                    color={colors.grey[300]}
-                    sx={{ m: "15px 0 5px 20px" }}
-                >
-                    Management
-                </Typography>
-            )}
 
             <Item
                 title="Products"
@@ -194,7 +166,7 @@ const Sidebar = () => {
             )}
 
             <Item
-                title="Order Status"
+                title="Statuses"
                 to="/orderStatus"
                 icon={<ViewListIcon />}
                 selected={selected}
@@ -202,7 +174,7 @@ const Sidebar = () => {
             />
 
             <Item
-                title="Order Priority"
+                title="Priorities"
                 to="/orderPriority"
                 icon={<KeyboardDoubleArrowUpIcon />}
                 selected={selected}
@@ -210,7 +182,7 @@ const Sidebar = () => {
             />
 
             <Item
-                title="Printing Service"
+                title="Printing Services"
                 to="/printingService"
                 icon={<PrintIcon />}
                 selected={selected}
