@@ -35,7 +35,7 @@ const OrderDetailsView = ({
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <TextField
-                        value={order?.name}
+                        value={order && order.name ? order.name : ""}
                         label="Title"
                         variant="outlined"
                         fullWidth
@@ -45,11 +45,12 @@ const OrderDetailsView = ({
                 <Grid item xs={6}>
                     <Autocomplete
                         disablePortal
-                        value={orderData.orderStatus && orderData.orderStatus.name ? orderData.orderStatus.name : "Vazio"}
+                        value={orderData && orderData.orderStatus && orderData.orderStatus.name ? orderData.orderStatus.name : "Vazio"}
                         options={[{id: -1, label: 'Vazio'}, ...statusOptions]}
                         onChange={(event, value) => {
                             const updatedOrder = { ...orderData, orderStatus: value.value || null };
                             orderUpdateHook(updatedOrder);
+                            setOrderData(updatedOrder);
                         }}
                         renderInput={(params) => <TextField {...params} label="Status" variant="outlined" size="small" />}
                     />
@@ -68,11 +69,12 @@ const OrderDetailsView = ({
                 <Grid item xs={6}>
                     <Autocomplete
                         disablePortal
-                        value={orderData.contact && orderData.contact.first_name ? orderData.contact.first_name : "Vazio"}
+                        value={orderData && orderData.contact && orderData.contact.first_name ? orderData.contact.first_name : "Vazio"}
                         options={[{id: -1, label: 'Vazio'}, ...contactOptions]}
                         onChange={(event, value) => {
-                            const updatedOrder = { ...order, contact: value.value || null };
+                            const updatedOrder = { ...orderData, contact: value.value || null };
                             orderUpdateHook(updatedOrder);
+                            setOrderData(updatedOrder);
                         }}
                         renderInput={(params) => <TextField {...params} label="Client" variant="outlined" size="small" />}
                     />
@@ -80,11 +82,12 @@ const OrderDetailsView = ({
                 <Grid item xs={6}>
                     <Autocomplete
                         disablePortal
-                        value={orderData.name && orderData.orderPriority.name ? orderData.orderPriority.name : "Vazio"}
+                        value={orderData && orderData.orderPriority && orderData.orderPriority.name ? orderData.orderPriority.name : "Vazio"}
                         options={[{id: -1, label: 'Vazio'}, ...prioritiesOptions]}
                         onChange={(event, value) => {
-                            const updatedOrder = { ...order, orderPriority: value.value || null };
+                            const updatedOrder = { ...orderData, orderPriority: value.value || null };
                             orderUpdateHook(updatedOrder);
+                            setOrderData(updatedOrder);
                         }}
                         renderInput={(params) => <TextField {...params} label="Priority" variant="outlined" size="small" />}
                     />

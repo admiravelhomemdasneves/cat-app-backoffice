@@ -1,4 +1,3 @@
-import Link from '@mui/material/Link';
 import { useGetOrders } from "../../api/orders/getOrders";
 import { useGetOrderStatus } from '../../api/orderStatus/getOrderStatus';
 import { useGetContacts } from '../../api/contacts/getContacts';
@@ -31,9 +30,6 @@ export const OrdersStore = () => {
                 field: "name",
                 headerName: "NAME",
                 editable: true,
-                renderCell: (params) => (
-                    <Link href={`/orders/${params.id}`} color="secondary"> {params.value} </Link>
-                ),
             },
             {
                 field: "description",
