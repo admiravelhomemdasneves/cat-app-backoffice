@@ -6,10 +6,10 @@ import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
 import ContactsPage from './pages/contacts/ContactsPage';
 import DashboardPage from './pages/DashboardPage';
-import ProductsPage from './pages/ProductsPage';
-import OrderStatusPage from './pages/OrderStatusPage';
+import ProductsPage from './pages/products/ProductsPage';
+import StatusesPage from './pages/statuses/StatusesPage';
 import PrioritiesPage from './pages/priorities/PrioritiesPage';
-import PrintingServicePage from './pages/PrintingServicePage';
+import PrintingServicesPage from './pages/printingServices/PrintingServicesPage';
 import LoginPage from './pages/LoginPage';
 import OrdersPage from './pages/orders/OrdersPage';
 
@@ -32,9 +32,9 @@ function App() {
                   <Route path="/orders" element={<OrdersPage />} />
                   <Route path="/contacts" element={<ContactsPage />} />
                   <Route path='/products' element={<ProductsPage />} />
-                  <Route path='/orderStatus' element={<OrderStatusPage />} />
+                  <Route path='/orderStatus' element={<StatusesPage />} />
                   <Route path='/orderPriority' element={<PrioritiesPage />} />
-                  <Route path='/printingService' element={<PrintingServicePage />} />
+                  <Route path='/printingService' element={<PrintingServicesPage />} />
                 </Routes>
             </main>        
           </div>
