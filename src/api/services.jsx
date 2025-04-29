@@ -31,6 +31,7 @@ const Services = {
   GET_ID_ORDER_PRIORITY : `/orderPriority`,
   DELETE_ID_ORDER_PRIORITY : `/orderPriority`,
   PUT_ID_ORDER_PRIORITY : `/orderPriority`,
+  INACTIVATE_PRIORITY : `/orderPriority/inactivate`,
 
   GET_ALL_PRINTING_SERVICE : `/printingService`,
   GET_ID_PRINTING_SERVICE : `/printingService`,
