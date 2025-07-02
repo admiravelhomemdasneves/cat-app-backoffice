@@ -27,6 +27,17 @@ export const tokens = (mode) => ({
             800: "#080b12",
             900: "#040509"
         },
+        secondary: {
+            100: "#331400",
+            200: "#6e3d25",
+            300: "#ab4a1a",
+            400: "#e05712",
+            500: "#ff8000",
+            600: "#ff802b",
+            700: "#ff944d",
+            800: "#ffbf94",
+            900: "#ffdfc9",
+        },
         greenAccent: {
             100: "#dbf5ee",
             200: "#b7ebde",
@@ -77,23 +88,34 @@ export const tokens = (mode) => ({
             100: "#040509",
             200: "#080b12",
             300: "#0c101b",
-            400: "#f2f0f0",
-            500: "#141b2d",
+            400: "#e3dcdc",
+            500: "#F8F6F6",
             600: "#434957",
             700: "#727681",
             800: "#a1a4ab",
             900: "#d0d1d5",
         },
+        secondary: {
+            100: "#331400",
+            200: "#6e3d25",
+            300: "#ab4a1a",
+            400: "#e05712",
+            500: "#ff8000",
+            600: "#ff802b",
+            700: "#ff944d",
+            800: "#ffbf94",
+            900: "#ffdfc9",
+        },
         greenAccent: {
-            100: "#0f2922",
-            200: "#1e5245",
-            300: "#2e7c67",
-            400: "#3da58a",
+            100: "#dbf5ee",
+            200: "#b7ebde",
+            300: "#94e2cd",
+            400: "#70d8bd",
             500: "#4cceac",
-            600: "#70d8bd",
-            700: "#94e2cd",
-            800: "#b7ebde",
-            900: "#dbf5ee",
+            600: "#3da58a",
+            700: "#2e7c67",
+            800: "#1e5245",
+            900: "#0f2922"
         },
         redAccent: {
             100: "#2c100f",
@@ -133,7 +155,7 @@ export const themeSettings = (mode) => {
                     main: colors.primary[500],
                 },
                 secondary: {
-                    main: colors.greenAccent[500],
+                    main: colors.secondary[500],
                 },
                 neutral: {
                     dark: colors.grey[700],
@@ -149,7 +171,7 @@ export const themeSettings = (mode) => {
                     main: colors.primary[100],
                 },
                 secondary: {
-                    main: colors.greenAccent[500],
+                    main: colors.secondary[500],
                 },
                 neutral: {
                     dark: colors.grey[700],
@@ -157,7 +179,7 @@ export const themeSettings = (mode) => {
                     light: colors.grey[100],
                 },
                 background: {
-                    default: "#fcfcfc",
+                    default: colors.primary[500],
                 },
             }),
         },
@@ -211,7 +233,7 @@ export const ColorModeContext = createContext({
 });
 
 export const useMode = () => {
-    const [mode, setMode] = useState("dark");
+    const [mode, setMode] = useState("light");
 
     const colorMode = useMemo(
         () => ({
