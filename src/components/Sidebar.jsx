@@ -48,10 +48,10 @@ const Sidebar = () => {
           padding: "5px 35px 5px 20px !important",
         },
         "& .pro-inner-item:hover": {
-          color: "#868dfb !important",
+          color: colors.secondary[500] + " !important",
         },
         "& .pro-menu-item.active": {
-          color: "#6870fa !important",
+          color: colors.secondary[400] + " !important",
         },
       }}
     >
@@ -104,7 +104,7 @@ const Sidebar = () => {
                 >
                   A Catarina Almeida
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
+                <Typography variant="h5" color={colors.secondary[500]}>
                   CEO Admin
                 </Typography>
               </Box>

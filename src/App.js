@@ -4,13 +4,12 @@ import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
-import ContactsPage from './pages/ContactsPage';
+import ContactsPage from './pages/contacts/ContactsPage';
 import DashboardPage from './pages/DashboardPage';
-import ProductsPage from './pages/ProductsPage';
-import OrderStatusPage from './pages/OrderStatusPage';
-import OrderPriorityPage from './pages/OrderPriorityPage';
-import PrintingServicePage from './pages/PrintingServicePage';
-import OrderDetailsPage from './pages/OrderDetailsPage';
+import ProductsPage from './pages/products/ProductsPage';
+import StatusesPage from './pages/statuses/StatusesPage';
+import PrioritiesPage from './pages/priorities/PrioritiesPage';
+import PrintingServicesPage from './pages/printingServices/PrintingServicesPage';
 import LoginPage from './pages/LoginPage';
 import OrdersPage from './pages/orders/OrdersPage';
 
@@ -31,12 +30,11 @@ function App() {
                   <Route path="/" element={<DashboardPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/orders" element={<OrdersPage />} />
-                  <Route path="/orders/:idOrder" element={<OrderDetailsPage />} />
                   <Route path="/contacts" element={<ContactsPage />} />
                   <Route path='/products' element={<ProductsPage />} />
-                  <Route path='/orderStatus' element={<OrderStatusPage />} />
-                  <Route path='/orderPriority' element={<OrderPriorityPage />} />
-                  <Route path='/printingService' element={<PrintingServicePage />} />
+                  <Route path='/orderStatus' element={<StatusesPage />} />
+                  <Route path='/orderPriority' element={<PrioritiesPage />} />
+                  <Route path='/printingService' element={<PrintingServicesPage />} />
                 </Routes>
             </main>        
           </div>
