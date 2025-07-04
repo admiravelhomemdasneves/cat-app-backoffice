@@ -101,8 +101,8 @@ const LoginPage = () => {
 
             <Grid item xs={12}>
                 <Button
-                    variant="outlined"
-                    color="secondary"
+                    variant="contained"
+                    color="primary"
                     size="large"
                     onClick={handleSubmit}
                 >

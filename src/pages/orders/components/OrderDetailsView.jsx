@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Box, TextField, Grid, Autocomplete } from "@mui/material";
+import { Box, TextField, Grid, Autocomplete, useTheme, alpha } from "@mui/material";
 import DataTable from "../../../components/DataTable";
+import { tokens } from "../../../theme";
 
 const OrderDetailsView = ({ 
     order, 
@@ -14,6 +15,9 @@ const OrderDetailsView = ({
     statusOptions, 
     prioritiesOptions 
 }) => {
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+
     const [orderData, setOrderData] = useState(order);
     const [products, setProducts] = useState([]);
 
@@ -40,6 +44,9 @@ const OrderDetailsView = ({
                         variant="outlined"
                         fullWidth
                         size="small"
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -53,6 +60,9 @@ const OrderDetailsView = ({
                             setOrderData(updatedOrder);
                         }}
                         renderInput={(params) => <TextField {...params} label="Status" variant="outlined" size="small" />}
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -64,6 +74,9 @@ const OrderDetailsView = ({
                         multiline
                         size="small"
                         rows={4}
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -77,6 +90,9 @@ const OrderDetailsView = ({
                             setOrderData(updatedOrder);
                         }}
                         renderInput={(params) => <TextField {...params} label="Client" variant="outlined" size="small" />}
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -90,6 +106,9 @@ const OrderDetailsView = ({
                             setOrderData(updatedOrder);
                         }}
                         renderInput={(params) => <TextField {...params} label="Priority" variant="outlined" size="small" />}
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -100,15 +119,22 @@ const OrderDetailsView = ({
                         fullWidth
                         size="small"
                         disabled
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={6}>
                     <TextField
                         value={(order?.date_due && new Date(order?.date_due).toLocaleDateString("en-GB")) || ""}
                         label="Due Date"
+                        //type="date"
                         variant="outlined"
                         fullWidth
                         size="small"
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>
