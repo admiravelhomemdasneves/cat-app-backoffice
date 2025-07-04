@@ -1,13 +1,17 @@
 import { DataGrid, GridRowModes, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons, useGridApiRef } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
-import { Button } from "@mui/material";
+import { Button, alpha, useTheme } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import { tokens } from "../theme";
 
 const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook, onRowSelection }) => {
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+
     const [apiRef] = useState(useGridApiRef());
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
@@ -67,9 +71,10 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
 
     const gridToolbar = () => {
         return (
-            <GridToolbarContainer>
+            <GridToolbarContainer style={{ backgroundColor: colors.primary[500] }}
+            >
                 <Button 
-                    color="secondary" 
+                    color="primary"
                     startIcon={<AddIcon />} 
                     onClick={handleAddRow}
                 >
@@ -137,6 +142,17 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
                 onRowSelectionModelChange={(newSelection) => {
                   const selectedRow = gridData.find(row => row[rowIdField] === newSelection[0]);
                   onRowSelection && onRowSelection(selectedRow || null);
+                }}
+                sx={{
+                  '.MuiDataGrid-footerContainer': {
+                    backgroundColor: colors.primary[500],
+                  },
+                  '.MuiDataGrid-row': {
+                    backgroundColor: alpha(colors.primary[500], 0.6),
+                  },
+                  '& .MuiDataGrid-virtualScroller': {
+                    backgroundColor: alpha(colors.primary[500], 0.6),
+                  },
                 }}
             />
         </>

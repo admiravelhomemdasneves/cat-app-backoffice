@@ -224,6 +224,19 @@ export const themeSettings = (mode) => {
                 },
             },
         },
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                    backgroundImage: `url('/assets/layered-waves-haikei.svg')`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    minHeight: '100vh',
+                    },
+                },
+            },
+        },
     };
 };
 
