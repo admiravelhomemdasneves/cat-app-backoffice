@@ -52,30 +52,28 @@ const OrderDetailsView = ({
                 <Grid item xs={6}>
                     <Autocomplete
                         disablePortal
-                        value={orderData && orderData.orderStatus && orderData.orderStatus.name ? orderData.orderStatus.name : "Vazio"}
+                        value={orderData && orderData.status && orderData.status.name ? orderData.status.name : "Vazio"}
                         options={[{id: -1, label: 'Vazio'}, ...statusOptions]}
                         onChange={(event, value) => {
-                            const updatedOrder = { ...orderData, orderStatus: value.value || null };
+                            const updatedOrder = { ...orderData, status: value.value || null };
                             orderUpdateHook(updatedOrder);
                             setOrderData(updatedOrder);
                         }}
-                        renderInput={(params) => <TextField {...params} label="Status" variant="outlined" size="small" />}
-                        sx={{
-                            backgroundColor: alpha(colors.primary[500], 0.6)
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        value={order?.description}
-                        label="Description"
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        size="small"
-                        rows={4}
-                        sx={{
-                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        renderInput={(params) => {
+                            const statusColor = orderData?.status?.color ? orderData.status.color : alpha(colors.primary[500], 0.6);
+
+                            return (
+                                <TextField
+                                    {...params}
+                                    label="Status"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{
+                                        backgroundColor: statusColor,
+                                        borderRadius: 1
+                                    }}
+                                />
+                            );
                         }}
                     />
                 </Grid>
@@ -98,16 +96,28 @@ const OrderDetailsView = ({
                 <Grid item xs={6}>
                     <Autocomplete
                         disablePortal
-                        value={orderData && orderData.orderPriority && orderData.orderPriority.name ? orderData.orderPriority.name : "Vazio"}
+                        value={orderData && orderData.priority && orderData.priority.name ? orderData.priority.name : "Vazio"}
                         options={[{id: -1, label: 'Vazio'}, ...prioritiesOptions]}
                         onChange={(event, value) => {
-                            const updatedOrder = { ...orderData, orderPriority: value.value || null };
+                            const updatedOrder = { ...orderData, priority: value.value || null };
                             orderUpdateHook(updatedOrder);
                             setOrderData(updatedOrder);
                         }}
-                        renderInput={(params) => <TextField {...params} label="Priority" variant="outlined" size="small" />}
-                        sx={{
-                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        renderInput={(params) => {
+                            const priorityColor = orderData?.priority?.color ? orderData.priority.color : alpha(colors.primary[500], 0.6);
+
+                            return (
+                                <TextField
+                                    {...params}
+                                    label="Priority"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{
+                                        backgroundColor: priorityColor,
+                                        borderRadius: 1
+                                    }}
+                                />
+                            );
                         }}
                     />
                 </Grid>
@@ -132,6 +142,20 @@ const OrderDetailsView = ({
                         variant="outlined"
                         fullWidth
                         size="small"
+                        sx={{
+                            backgroundColor: alpha(colors.primary[500], 0.6)
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        value={order?.description}
+                        label="Description"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        size="small"
+                        rows={4}
                         sx={{
                             backgroundColor: alpha(colors.primary[500], 0.6)
                         }}
