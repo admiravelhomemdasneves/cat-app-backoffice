@@ -32,11 +32,6 @@ export const OrdersStore = () => {
                 editable: true,
             },
             {
-                field: "description",
-                headerName: "DESCRIPTION",
-                editable: true,
-            },
-            {
                 field: "contact",
                 headerName: "CLIENT",
                 editable: true,
@@ -68,19 +63,6 @@ export const OrdersStore = () => {
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_priority ? value.id_priority : -1,
                 valueSetter: (value, row) => { return { ...row, priority: value !== -1 ? priorities.find(entry => entry.id_priority === value) : null }},
-            },
-            {
-                field: "date_requested",
-                headerName: "CREATION DATE",
-                editable: false,
-                type: "date",
-                valueFormatter: (data) => {
-                    if (data) {
-                        return new Date(data).toLocaleDateString("en-GB");
-                    }
-
-                    return "";
-                },
             },
             {
                 field: "date_due",
