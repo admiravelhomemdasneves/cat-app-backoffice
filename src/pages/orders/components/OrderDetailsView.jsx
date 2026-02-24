@@ -24,7 +24,7 @@ const OrderDetailsView = ({
 
     useEffect(() => {
         setOrderData(order);
-        setProducts(order?.orderProducts ?? []);
+        setProducts(order?.orderItems ?? []);
     }, [order]);
 
     const handleProductUpdate = (row) => {
@@ -37,7 +37,7 @@ const OrderDetailsView = ({
             borderLeft={1} 
             borderColor="divider"
         >
-            <Accordion defaultExpanded>
+            <Accordion defaultExpanded sx={{backgroundColor: "rgba(255, 255, 255, 0.8)", backdropFilter: "blur(4px)"}}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
                     <Typography component="span" variant="h5" color={colors.grey[100]} fontWeight="bold">
                         ORDER DETAILS
@@ -45,18 +45,6 @@ const OrderDetailsView = ({
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                value={order && order.name ? order.name : ""}
-                                label="Title"
-                                variant="outlined"
-                                fullWidth
-                                size="small"
-                                sx={{
-                                    backgroundColor: alpha(colors.primary[500], 0.6)
-                                }}
-                            />
-                        </Grid>
                         <Grid item xs={6}>
                             <Autocomplete
                                 disablePortal
@@ -139,11 +127,25 @@ const OrderDetailsView = ({
                                 }}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                value={order?.description}
+                                label="Notes"
+                                variant="outlined"
+                                fullWidth
+                                multiline
+                                size="small"
+                                rows={4}
+                                sx={{
+                                    backgroundColor: alpha(colors.primary[500], 0.6)
+                                }}
+                            />
+                        </Grid>
                     </Grid>
                 </AccordionDetails>
             </Accordion>
 
-            <Accordion defaultExpanded>
+            <Accordion defaultExpanded sx={{backgroundColor: "rgba(255, 255, 255, 0.8)", backdropFilter: "blur(4px)"}}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
                     <Typography component="span" variant="h5" color={colors.grey[100]} fontWeight="bold">
                         CLIENT DETAILS
@@ -227,7 +229,7 @@ const OrderDetailsView = ({
                 </AccordionDetails>
             </Accordion>
 
-            <Accordion defaultExpanded>
+            <Accordion defaultExpanded sx={{backgroundColor: "rgba(255, 255, 255, 0.8)", backdropFilter: "blur(4px)"}}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
                     <Typography component="span" variant="h5" color={colors.grey[100]} fontWeight="bold">
                         PRODUCTS DETAILS
@@ -243,20 +245,6 @@ const OrderDetailsView = ({
                                 rowIdField={rowIdField}
                                 updateHook={handleProductUpdate}
                                 deleteHook={productDeleteHook}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                value={order?.description}
-                                label="Notes"
-                                variant="outlined"
-                                fullWidth
-                                multiline
-                                size="small"
-                                rows={4}
-                                sx={{
-                                    backgroundColor: alpha(colors.primary[500], 0.6)
-                                }}
                             />
                         </Grid>
                     </Grid>

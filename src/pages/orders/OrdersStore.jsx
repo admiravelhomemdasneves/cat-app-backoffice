@@ -27,11 +27,6 @@ export const OrdersStore = () => {
         deleteHook : inactivateOrder,
         columnsDefinition: [
             {
-                field: "name",
-                headerName: "NAME",
-                editable: true,
-            },
-            {
                 field: "contact",
                 headerName: "CLIENT",
                 editable: true,
@@ -41,6 +36,7 @@ export const OrdersStore = () => {
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_contact ? value.id_contact : -1,
                 valueSetter: (value, row) => { return { ...row, contact: value !== -1 ? contacts.find(entry => entry.id_contact === value) : null }},
+                flex: 1
             },
             {
                 field: "status",
@@ -52,6 +48,7 @@ export const OrdersStore = () => {
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_status ? value.id_status : -1,
                 valueSetter: (value, row) => { return { ...row, status: value !== -1 ? orderStatus.find(entry => entry.id_status === value) : null }},
+                flex: 1
             },
             {
                 field: "priority",
@@ -63,6 +60,7 @@ export const OrdersStore = () => {
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_priority ? value.id_priority : -1,
                 valueSetter: (value, row) => { return { ...row, priority: value !== -1 ? priorities.find(entry => entry.id_priority === value) : null }},
+                flex: 1
             },
             {
                 field: "date_due",
@@ -76,11 +74,11 @@ export const OrdersStore = () => {
 
                     return "";
                 },
+                flex: 1
             }
         ],
         sampleRow: {
             "id_order": null,
-            "name": "",
             "description": "",
             "status": null,
             "contact": null,
@@ -109,11 +107,6 @@ export const OrderDetailStore = () => {
         detailDeleteHook : inactivateOrderProduct,
         detailColumnsDefinition: [
             {
-                field: "description",
-                headerName: "DESCRIPTION",
-                editable: true,
-            },
-            {
                 field: "product",
                 headerName: "PRODUCT",
                 editable: true,
@@ -123,10 +116,11 @@ export const OrderDetailStore = () => {
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_product ? value.id_product : -1,
                 valueSetter: (value, row) => { return { ...row, product: value !== -1 ? products.find(entry => entry.id_product === value) : null }},
+                flex: 0.8
             },
             {
                 field: "printingService",
-                headerName: "PRINTING SERVICE",
+                headerName: "SERVICE",
                 editable: true,
                 type: "singleSelect",
                 valueOptions: () => [{id: -1, label: 'Vazio'}, ...printingServices.map(entry => ({ id: entry.id_printing_service, label: entry.name }) )],
@@ -134,22 +128,20 @@ export const OrderDetailStore = () => {
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_printing_service ? value.id_printing_service : -1,
                 valueSetter: (value, row) => { return { ...row, printingService: value !== -1 ? printingServices.find(entry => entry.id_printing_service === value) : null }},
+                flex: 0.5
             },
             {
                 field: "quantity",
                 headerName: "QUANTITY",
                 editable: true,
+                flex: 0.5
             },
             {
-                field: "size",
-                headerName: "SIZE",
+                field: "description",
+                headerName: "NOTES",
                 editable: true,
+                flex: 1
             },
-            {
-                field: "color",
-                headerName: "COLOR",
-                editable: true,
-            }
         ],
         detailSampleRow: {
             "id_order_product": null,
@@ -157,8 +149,6 @@ export const OrderDetailStore = () => {
             "product": null,
             "printingService": null,
             "quantity": 0,
-            "size": null,
-            "color": null,
             "flagActive": true
         }
     }
