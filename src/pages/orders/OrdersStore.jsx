@@ -6,6 +6,7 @@ import { useUpdateOrder, useInactivateOrder } from "../../api/orders/createOrder
 import { useGetProducts } from '../../api/products/getProducts';
 import { useGetPrintingServices } from '../../api/printingServices/getPrintingServices';
 import { useUpdateOrderProduct, useInactivateOrderProduct } from '../../api/orderProducts/createOrderProducts';
+import AutocompleteImagePreview from "../../components/AutocompleteImagePreview";
 
 export const OrdersStore = () => {
     const gridData = useGetOrders();
@@ -109,14 +110,30 @@ export const OrderDetailStore = () => {
             {
                 field: "product",
                 headerName: "PRODUCT",
+                flex: 0.8,
                 editable: true,
-                type: "singleSelect",
-                valueOptions: () => [{id: -1, label: 'Vazio'}, ...products.map(entry => ({ id: entry.id_product, label: `${entry.brand || " "} - ${entry.name || " "}` }) )],
-                getOptionValue: (value) => value.id,
-                getOptionLabel: (value) => value.label,
-                valueGetter: (value) => value && value.id_product ? value.id_product : -1,
-                valueSetter: (value, row) => { return { ...row, product: value !== -1 ? products.find(entry => entry.id_product === value) : null }},
-                flex: 0.8
+                valueGetter: (value, row) => row.product ?? null,
+                renderEditCell: (params) => (
+                    <AutocompleteImagePreview
+                        products={products}
+                        value={params.value}
+                        onChange={(newValue) => {
+                            params.api.setEditCellValue({
+                                id: params.id,
+                                field: "product",
+                                value: newValue,
+                            });
+                        }}
+                        width={600}         // total dropdown width
+                        previewWidth={250}  // preview panel width
+                    />
+                ),
+                renderCell: (params) => {
+                    const product = params.value;
+                    if (!product) return null;
+
+                    return `${product.brand} - ${product.name}`;
+                },
             },
             {
                 field: "printingService",
