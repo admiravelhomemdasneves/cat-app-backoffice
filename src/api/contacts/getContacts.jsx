@@ -6,7 +6,7 @@ export const useGetContacts = () => {
     const { isPending, error, data } = useQuery({
         queryKey: ['contacts'],
         queryFn: async () => {
-        const response = await apiClient.get(Services.GET_ALL_CONTACTS);
+        const response = await apiClient.get(Services.BO_GET_ALL_CONTACTS);
         return response;
     }})
 

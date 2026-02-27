@@ -1,6 +1,8 @@
 const Services = {
   POST_LOGIN: `/auth/login`,
 
+  BO_GET_ALL_CONTACTS: `/bo/contact`,
+
   GET_ALL_CONTACTS : `/contact`,
   GET_ID_CONTACT : `/contact`,
   INACTIVATE_CONTACT : `/contact/inactivate`,

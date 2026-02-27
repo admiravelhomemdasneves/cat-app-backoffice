@@ -1,8 +1,7 @@
 import React from "react";
 import { Autocomplete, TextField, Box, Typography, Paper } from "@mui/material";
 
-// A simple emitter to pass highlight changes into StablePaper
-// without causing the PaperComponent reference to change.
+// A simple emitter to pass highlight changes into StablePaper without causing the PaperComponent reference to change.
 function createPreviewEmitter() {
   let listener = null;
   return {
@@ -80,8 +79,6 @@ const AutocompleteImagePreview = ({
           />
         );
       },
-    // width/previewWidth are layout props that rarely change.
-    // If they're truly static you can use [] here instead.
     [emitter, width, previewWidth]
   );
 
@@ -92,12 +89,8 @@ const AutocompleteImagePreview = ({
       options={products}
       value={value}
       getOptionKey={(option) => option.id_product}
-      getOptionLabel={(option) =>
-        option ? `${option.brand || ""} - ${option.name || ""}` : ""
-      }
-      isOptionEqualToValue={(option, val) =>
-        option.id_product === val?.id_product
-      }
+      getOptionLabel={(option) => option ? `${option.brand || ""} - ${option.name || ""}` : ""}
+      isOptionEqualToValue={(option, val) => option.id_product === val?.id_product}
       onChange={(_, newValue) => onChange?.(newValue)}
       onHighlightChange={(_, option) => emitter.emit(option ?? null)}
       ListboxProps={{ style: { maxHeight: 300, overflowY: "scroll" } }}
