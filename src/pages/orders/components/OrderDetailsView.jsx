@@ -51,7 +51,7 @@ const OrderDetailsView = ({
                                 value={orderData && orderData.status && orderData.status.name ? orderData.status.name : "Vazio"}
                                 options={[{id: -1, label: 'Vazio'}, ...statusOptions]}
                                 onChange={(event, value) => {
-                                    const updatedOrder = { ...orderData, status: value.value || null };
+                                    const updatedOrder = { ...orderData, status: value?.value || {id: -1, label: 'Vazio'} };
                                     orderUpdateHook(updatedOrder);
                                     setOrderData(updatedOrder);
                                 }}
@@ -79,7 +79,7 @@ const OrderDetailsView = ({
                                 value={orderData && orderData.priority && orderData.priority.name ? orderData.priority.name : "Vazio"}
                                 options={[{id: -1, label: 'Vazio'}, ...prioritiesOptions]}
                                 onChange={(event, value) => {
-                                    const updatedOrder = { ...orderData, priority: value.value || null };
+                                    const updatedOrder = { ...orderData, priority: value?.value || {id: -1, label: 'Vazio'} };
                                     orderUpdateHook(updatedOrder);
                                     setOrderData(updatedOrder);
                                 }}
@@ -156,10 +156,10 @@ const OrderDetailsView = ({
                         <Grid item xs={6}>
                             <Autocomplete
                                 disablePortal
-                                value={`${orderData?.contact?.first_name ?? ""} ${orderData?.contact?.last_name ?? ""}`.trim() || "Vazio"}
+                                value={`${orderData?.contact?.firstName ?? ""} ${orderData?.contact?.lastName ?? ""}`.trim() || "Vazio"}
                                 options={[{id: -1, label: 'Vazio'}, ...contactOptions]}
                                 onChange={(event, value) => {
-                                    const updatedOrder = { ...orderData, contact: value.value || null };
+                                    const updatedOrder = { ...orderData, contact: value?.value || {id: -1, label: 'Vazio'} };
                                     orderUpdateHook(updatedOrder);
                                     setOrderData(updatedOrder);
                                 }}

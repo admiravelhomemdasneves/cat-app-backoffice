@@ -15,7 +15,7 @@ export const OrdersStore = () => {
     const priorities = useGetPriorities();
     const { mutate: updateOrder } = useUpdateOrder();
     const { mutate: inactivateOrder } = useInactivateOrder();
-    const contactsOptions = contacts && contacts.map(entry => ({ id: entry.id_contact, label: `${entry.first_name || " "} ${entry.last_name || " "}`, value: entry }));
+    const contactsOptions = contacts && contacts.map(entry => ({ id: entry.idContact, label: `${entry.firstName || " "} ${entry.lastName || " "}`, value: entry }));
     const statusOptions = orderStatus && orderStatus.map(entry => ({ id: entry.id_status, label: entry.name, value: entry }));
     const prioritiesOptions = priorities && priorities.map(entry => ({ id: entry.id_priority, label: entry.name, value: entry }));
 
@@ -35,8 +35,8 @@ export const OrdersStore = () => {
                 valueOptions: () => [{id: -1, label: 'Vazio'}, ...contactsOptions],
                 getOptionValue: (value) => value.id,
                 getOptionLabel: (value) => value.label,
-                valueGetter: (value) => value && value.id_contact ? value.id_contact : -1,
-                valueSetter: (value, row) => { return { ...row, contact: value !== -1 ? contacts.find(entry => entry.id_contact === value) : null }},
+                valueGetter: (value) => value && value.idContact ? value.idContact : -1,
+                valueSetter: (value, row) => { return { ...row, contact: value !== -1 ? contacts.find(entry => entry.idContact === value) : null }},
                 flex: 1
             },
             {
