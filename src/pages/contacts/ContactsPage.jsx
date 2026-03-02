@@ -3,6 +3,7 @@ import { ContactsStore } from "./ContactsStore";
 import { Box } from "@mui/material";
 import Header from "../../components/Header";
 import DataTable from "../../components/DataTable";
+import ContactForm from "./components/ContactForm";
 
 const ContactsPage = () => {
     const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, updateHook, deleteHook} = ContactsStore();
@@ -20,6 +21,7 @@ const ContactsPage = () => {
             rowIdField={rowIdField}
             updateHook={updateHook}
             deleteHook={deleteHook}
+            addRecordComponent={({ newRow, setNewRow }) => ( <ContactForm initialData={newRow} onChange={setNewRow} /> )}
         />
         </Box>
     )
