@@ -14,15 +14,21 @@ const ContactsPage = () => {
             title={pageTitle} 
             subtitle={pageSubtitle} 
         />
-        <DataTable
-            gridData={gridData}
-            columnsDefinition={columnsDefinition}
-            sampleRow={sampleRow}
-            rowIdField={rowIdField}
-            updateHook={updateHook}
-            deleteHook={deleteHook}
-            addRecordComponent={({ newRow, setNewRow }) => ( <ContactForm initialData={newRow} onChange={setNewRow} /> )}
-        />
+            <DataTable
+                gridData={gridData}
+                columnsDefinition={columnsDefinition}
+                sampleRow={sampleRow}
+                rowIdField={rowIdField}
+                updateHook={updateHook}
+                deleteHook={deleteHook}
+                addRecordComponent={({ initialData, onChange }) => (
+                    <ContactForm initialData={initialData} onChange={onChange} />
+                )}
+                editRecordComponent={({ initialData, onChange }) => (
+                    <ContactForm initialData={initialData} onChange={onChange} />
+                )}
+                allowRowEditOnGrid={false}
+            />
         </Box>
     )
 }

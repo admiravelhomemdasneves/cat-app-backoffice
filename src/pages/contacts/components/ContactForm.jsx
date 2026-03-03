@@ -53,7 +53,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={6}>
           <TextField
             fullWidth
-            label="firstName"
+            label="First Name"
             value={form.firstName}
             onChange={(e) => handleChange("firstName", e.target.value)}
           />
@@ -62,7 +62,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={6}>
           <TextField
             fullWidth
-            label="lastName"
+            label="Last Name"
             value={form.lastName}
             onChange={(e) => handleChange("lastName", e.target.value)}
           />
@@ -72,7 +72,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="nif"
+            label="NIF"
             value={form.nif}
             onChange={(e) => handleChange("nif", e.target.value)}
           />
@@ -81,7 +81,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="phoneNumber"
+            label="Phone Number"
             value={form.phoneNumber}
             onChange={(e) => handleChange("phoneNumber", e.target.value)}
           />
@@ -90,7 +90,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="email"
+            label="Email"
             value={form.email}
             onChange={(e) => handleChange("email", e.target.value)}
           />
@@ -107,7 +107,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={8}>
           <TextField
             fullWidth
-            label="street"
+            label="Street"
             value={form.shippingAddress.street}
             onChange={(e) =>
               handleAddressChange("shippingAddress", "street", e.target.value)
@@ -118,7 +118,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="door_number"
+            label="Door Number"
             value={form.shippingAddress.door_number}
             onChange={(e) =>
               handleAddressChange("shippingAddress", "door_number", e.target.value)
@@ -130,7 +130,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="zip_code"
+            label="Zip Code"
             value={form.shippingAddress.zip_code}
             onChange={(e) =>
               handleAddressChange("shippingAddress", "zip_code", e.target.value)
@@ -141,7 +141,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="city"
+            label="City"
             value={form.shippingAddress.city}
             onChange={(e) =>
               handleAddressChange("shippingAddress", "city", e.target.value)
@@ -152,7 +152,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="country"
+            label="Country"
             value={form.shippingAddress.country}
             onChange={(e) =>
               handleAddressChange("shippingAddress", "country", e.target.value)
@@ -171,7 +171,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={8}>
           <TextField
             fullWidth
-            label="street"
+            label="Street"
             value={form.billingAddress.street}
             onChange={(e) =>
               handleAddressChange("billingAddress", "street", e.target.value)
@@ -182,7 +182,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="door_number"
+            label="Door Number"
             value={form.billingAddress.door_number}
             onChange={(e) =>
               handleAddressChange("billingAddress", "door_number", e.target.value)
@@ -194,7 +194,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="zip_code"
+            label="Zip Code"
             value={form.billingAddress.zip_code}
             onChange={(e) =>
               handleAddressChange("billingAddress", "zip_code", e.target.value)
@@ -205,7 +205,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="city"
+            label="City"
             value={form.billingAddress.city}
             onChange={(e) =>
               handleAddressChange("billingAddress", "city", e.target.value)
@@ -216,7 +216,7 @@ const ContactForm = ({ initialData = {}, onChange }) => {
         <Grid item xs={4}>
           <TextField
             fullWidth
-            label="country"
+            label="Country"
             value={form.billingAddress.country}
             onChange={(e) =>
               handleAddressChange("billingAddress", "country", e.target.value)

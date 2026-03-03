@@ -47,7 +47,6 @@ const OrderDetailsView = ({
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <Autocomplete
-                                disablePortal
                                 value={orderData && orderData.status && orderData.status.name ? orderData.status.name : "Vazio"}
                                 options={[{id: -1, label: 'Vazio'}, ...statusOptions]}
                                 onChange={(event, value) => {
@@ -75,7 +74,6 @@ const OrderDetailsView = ({
                         </Grid>
                         <Grid item xs={6}>
                             <Autocomplete
-                                disablePortal
                                 value={orderData && orderData.priority && orderData.priority.name ? orderData.priority.name : "Vazio"}
                                 options={[{id: -1, label: 'Vazio'}, ...prioritiesOptions]}
                                 onChange={(event, value) => {
@@ -155,7 +153,6 @@ const OrderDetailsView = ({
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <Autocomplete
-                                disablePortal
                                 value={`${orderData?.contact?.firstName ?? ""} ${orderData?.contact?.lastName ?? ""}`.trim() || "Vazio"}
                                 options={[{id: -1, label: 'Vazio'}, ...contactOptions]}
                                 onChange={(event, value) => {

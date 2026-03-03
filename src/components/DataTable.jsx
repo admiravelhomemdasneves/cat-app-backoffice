@@ -1,5 +1,5 @@
 import { DataGrid, GridRowModes, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons, useGridApiRef } from "@mui/x-data-grid";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, alpha, useTheme, Modal, Paper, Box, Divider } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import { tokens } from "../theme";
 
-const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook, onRowSelection, addRecordComponent = null }) => {
+const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook, onRowSelection, addRecordComponent = null, editRecordComponent = null, allowRowEditOnGrid = true }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -17,7 +17,10 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
     const [addModalOpen, setAddModalOpen] = useState(false);
-    const [newRow, setNewRow] = useState(sampleRow || {});
+    const [editModalOpen, setEditModalOpen] = useState(false);
+
+    const pendingAddRef = useRef(null);
+    const pendingEditRef = useRef(null);
 
     useEffect(() => {
         gridData ? setRows(gridData) : setRows([]);
@@ -50,20 +53,19 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
         },
     ];
 
-    const gridToolbar = () => {
-        return (
-            <GridToolbarContainer style={{ backgroundColor: colors.primary[500] }}>
-                <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRow}>
-                    Add record
-                </Button>
-            </GridToolbarContainer>
-        );
-    };
+    const gridToolbar = () => (
+        <GridToolbarContainer style={{ backgroundColor: colors.primary[500] }}>
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRow}>
+                Add record
+            </Button>
+        </GridToolbarContainer>
+    );
 
+    // ---- ADD ----
     const handleAddRow = () => {
         if (addRecordComponent) {
             const id = Date.now() * 100000 + Math.floor(Math.random() * 100000);
-            setNewRow({ ...sampleRow, [rowIdField]: id, isNew: true });
+            pendingAddRef.current = { ...sampleRow, [rowIdField]: id, isNew: true };
             setAddModalOpen(true);
         } else {
             const id = Date.now() * 100000 + Math.floor(Math.random() * 100000);
@@ -74,22 +76,47 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
     };
 
     const handleAddConfirm = () => {
-        updateHook(newRow);
-        setRows((prevRows) => [...prevRows, newRow]);
+        if (pendingAddRef.current) {
+            updateHook(pendingAddRef.current);
+            setRows((prevRows) => [...prevRows, pendingAddRef.current]);
+        }
         setAddModalOpen(false);
-        setNewRow(sampleRow || {});
-        console.log(newRow);
+        pendingAddRef.current = null;
     };
 
     const handleAddCancel = () => {
         setAddModalOpen(false);
-        setNewRow(sampleRow || {});
+        pendingAddRef.current = null;
     };
 
+    // ---- EDIT ----
     const handleEditClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+        if (editRecordComponent) {
+            const row = rows.find((r) => r[rowIdField] === id);
+            pendingEditRef.current = { ...row };
+            setEditModalOpen(true);
+        } else {
+            setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+        }
     };
 
+    const handleEditConfirm = () => {
+        if (pendingEditRef.current) {
+            updateHook(pendingEditRef.current);
+            setRows((prevRows) => prevRows.map((r) =>
+                r[rowIdField] === pendingEditRef.current[rowIdField] ? pendingEditRef.current : r
+            ));
+        }
+        setEditModalOpen(false);
+        pendingEditRef.current = null;
+    };
+
+    const handleEditCancel = () => {
+        setEditModalOpen(false);
+        pendingEditRef.current = null;
+    };
+
+    // ---- EXISTING HANDLERS ----
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
@@ -120,6 +147,29 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
         setRowModesModel(newRowModesModel);
     };
 
+    const modalContent = (children, onConfirm, onCancel) => (
+        <Paper sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: 400,
+            maxHeight: '90vh',
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: 2,
+        }}>
+            <Box sx={{ p: 3, overflowY: 'auto', flex: 1 }}>
+                {children}
+            </Box>
+            <Divider />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, p: 2, backgroundColor: colors.primary[500], flexShrink: 0 }}>
+                <Button variant="outlined" color="inherit" startIcon={<CancelIcon />} onClick={onCancel}>Cancel</Button>
+                <Button variant="contained" color="primary" startIcon={<CheckIcon />} onClick={onConfirm}>Confirm</Button>
+            </Box>
+        </Paper>
+    );
+
     return (
         <>
             <DataGrid
@@ -143,46 +193,40 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
                     '.MuiDataGrid-row': { backgroundColor: alpha(colors.primary[500], 0.6) },
                     '& .MuiDataGrid-virtualScroller': { backgroundColor: alpha(colors.primary[500], 0.6) },
                 }}
+                isCellEditable={(params) => {
+                    if (!allowRowEditOnGrid) return false;
+                    return params.colDef.editable;
+                }}
+                onCellDoubleClick={(params, event) => {
+                    if (!allowRowEditOnGrid) event.defaultMuiPrevented = true;
+                }}
             />
 
+            {/* ADD MODAL */}
             {addRecordComponent && (
                 <Modal open={addModalOpen} onClose={handleAddCancel}>
-                    <Paper sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        minWidth: 400,
-                        borderRadius: 2,
-                        overflow: 'hidden',
-                    }}>
-                        {/* Form content provided by parent */}
-                        <Box sx={{ p: 3 }}>
-                            {addRecordComponent({ newRow, setNewRow })}
-                        </Box>
+                    {modalContent(
+                        addRecordComponent({
+                            initialData: pendingAddRef.current,
+                            onChange: (updated) => { pendingAddRef.current = { ...pendingAddRef.current, ...updated }; }
+                        }),
+                        handleAddConfirm,
+                        handleAddCancel
+                    )}
+                </Modal>
+            )}
 
-                        <Divider />
-
-                        {/* Confirm / Cancel footer */}
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, p: 2, backgroundColor: colors.primary[500] }}>
-                            <Button
-                                variant="outlined"
-                                color="inherit"
-                                startIcon={<CancelIcon />}
-                                onClick={handleAddCancel}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                startIcon={<CheckIcon />}
-                                onClick={handleAddConfirm}
-                            >
-                                Confirm
-                            </Button>
-                        </Box>
-                    </Paper>
+            {/* EDIT MODAL */}
+            {editRecordComponent && (
+                <Modal open={editModalOpen} onClose={handleEditCancel}>
+                    {modalContent(
+                        editRecordComponent({
+                            initialData: pendingEditRef.current,
+                            onChange: (updated) => { pendingEditRef.current = { ...pendingEditRef.current, ...updated }; }
+                        }),
+                        handleEditConfirm,
+                        handleEditCancel
+                    )}
                 </Modal>
             )}
         </>
