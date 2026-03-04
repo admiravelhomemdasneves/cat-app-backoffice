@@ -3,7 +3,7 @@ import { useGetOrderStatus } from '../../api/orderStatus/getOrderStatus';
 import { useGetContacts } from '../../api/contacts/getContacts';
 import { useGetPriorities } from '../../api/priorities/getPriorities';
 import { useUpdateOrder, useInactivateOrder } from "../../api/orders/createOrder";
-import { useGetProducts } from '../../api/products/getProducts';
+import { useGetProductsOLD } from '../../api/products/getProducts';
 import { useGetPrintingServices } from '../../api/printingServices/getPrintingServices';
 import { useUpdateOrderProduct, useInactivateOrderProduct } from '../../api/orderProducts/createOrderProducts';
 import AutocompleteImagePreview from "../../components/AutocompleteImagePreview";
@@ -97,7 +97,7 @@ export const OrdersStore = () => {
 };
 
 export const OrderDetailStore = () => {
-    const products = useGetProducts();
+    const products = useGetProductsOLD();
     const printingServices = useGetPrintingServices();
     const { mutate: updateOrderProduct } = useUpdateOrderProduct();
     const { mutate: inactivateOrderProduct } = useInactivateOrderProduct();

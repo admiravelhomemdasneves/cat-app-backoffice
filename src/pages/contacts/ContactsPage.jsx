@@ -21,12 +21,8 @@ const ContactsPage = () => {
                 rowIdField={rowIdField}
                 updateHook={updateHook}
                 deleteHook={deleteHook}
-                addRecordComponent={({ initialData, onChange }) => (
-                    <ContactForm initialData={initialData} onChange={onChange} />
-                )}
-                editRecordComponent={({ initialData, onChange }) => (
-                    <ContactForm initialData={initialData} onChange={onChange} />
-                )}
+                addRecordComponent={({ initialData, onChange }) => ( <ContactForm initialData={initialData} onChange={onChange}/> )}
+                editRecordComponent={({ initialData, onChange }) => ( <ContactForm initialData={initialData} onChange={onChange} /> )}
                 allowRowEditOnGrid={false}
             />
         </Box>
