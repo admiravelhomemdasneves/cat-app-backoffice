@@ -1,7 +1,7 @@
 import { useGetStores } from "../../api/stores/getStores";
 import { useGetColors } from "../../api/colors/getColors";
 import { useGetVats } from "../../api/vats/getVats";
-import { useUpdateProductParameter, useInactivateProductParameter } from "../../api/products/createProducts";
+import { useUpdateProductParameter, useInactivateProductParameter } from "../../api/productParameters/createProductParameters";
 import { useCreateColor } from "../../api/colors/createColors";
 import { useCreateVat } from "../../api/vats/createVats";
 

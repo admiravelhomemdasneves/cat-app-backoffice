@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Grid, TextField, Box, Typography, Autocomplete, createFilterOptions, Modal, Paper, Divider, Button } from "@mui/material";
+import React, { useState, useRef } from "react";
+import { Grid, TextField, Box, Typography, Autocomplete, createFilterOptions, Modal, Paper, Divider, Button, InputAdornment, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 
 const filter = createFilterOptions();
 
-// ─── Nested "Create Color" modal ───────────────────────────────────────────────
 const ColorForm = ({ open, initialName, onConfirm, onCancel }) => {
     const [form, setForm] = React.useState({ colorName: initialName || "", colorCode: "" });
+    const colorInputRef = useRef(null);
 
     React.useEffect(() => {
         if (open) setForm({ colorName: initialName || "", colorCode: "" });
     }, [open, initialName]);
+
+    const handleColorPick = (e) => {
+        setForm(p => ({ ...p, colorCode: e.target.value }));
+    };
 
     return (
         <Modal open={open} onClose={onCancel}>
@@ -20,10 +26,56 @@ const ColorForm = ({ open, initialName, onConfirm, onCancel }) => {
                     <Typography variant="h6" mb={2}>New Color</Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <TextField fullWidth label="Color Name" value={form.colorName} onChange={(e) => setForm(p => ({ ...p, colorName: e.target.value }))} />
+                            <TextField
+                                fullWidth
+                                label="Color Name"
+                                value={form.colorName}
+                                onChange={(e) => setForm(p => ({ ...p, colorName: e.target.value }))}
+                            />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField fullWidth label="Color Code (hex)" value={form.colorCode} onChange={(e) => setForm(p => ({ ...p, colorCode: e.target.value }))} />
+                            {/* Hidden native color picker */}
+                            <input
+                                ref={colorInputRef}
+                                type="color"
+                                value={form.colorCode || "#ffffff"}
+                                onChange={handleColorPick}
+                                style={{
+                                    position: "relative",
+                                    opacity: 0,
+                                    pointerEvents: "none",
+                                    width: 0,
+                                    height: 0,
+                                    left: "335px",  // push it to the right of the modal
+                                    top: "50%",
+                                }}
+                            />
+                            <TextField
+                                fullWidth
+                                label="Color Code (hex)"
+                                value={form.colorCode}
+                                onChange={(e) => setForm(p => ({ ...p, colorCode: e.target.value }))}
+                                InputProps={{
+                                    startAdornment: form.colorCode && (
+                                        <InputAdornment position="start">
+                                            <Box sx={{
+                                                width: 20,
+                                                height: 20,
+                                                borderRadius: "4px",
+                                                backgroundColor: form.colorCode,
+                                                border: "1px solid rgba(0,0,0,0.2)",
+                                            }} />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={() => colorInputRef.current.click()} edge="end">
+                                                <FormatColorFillIcon sx={{ color: form.colorCode || "inherit" }} />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
                         </Grid>
                     </Grid>
                 </Box>
@@ -163,9 +215,8 @@ const ProductParametersForm = ({
                         value={form.color}
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
-                            if (params.inputValue !== "") {
-                                filtered.push({ label: `Create "${params.inputValue}"`, inputValue: params.inputValue, isNew: true });
-                            }
+                            // Always pin "Create new" at the top
+                            filtered.unshift({ isNew: true, colorName: "Create new color", inputValue: "" });
                             return filtered;
                         }}
                         onChange={(_, value) => {
@@ -177,8 +228,23 @@ const ProductParametersForm = ({
                             }
                         }}
                         renderOption={(props, option) => (
-                            <li {...props} key={option?.idColor ?? option?.inputValue}>
-                                {option?.isNew ? <em>{option.label}</em> : option?.colorName}
+                            <li {...props} key={option?.idColor ?? "create-color"}>
+                                {option?.isNew
+                                    ? <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "primary.main" }}>
+                                        <AddIcon fontSize="small" /> Create new color
+                                    </Box>
+                                    : <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                                        <Box sx={{
+                                            width: 20,
+                                            height: 20,
+                                            borderRadius: "4px",
+                                            backgroundColor: option?.colorCode || "transparent",
+                                            border: "1px solid rgba(0,0,0,0.2)",
+                                            flexShrink: 0,
+                                        }} />
+                                        {option?.colorName}
+                                    </Box>
+                                }
                             </li>
                         )}
                         renderInput={(params) => <TextField {...params} label="Color" fullWidth />}
@@ -196,9 +262,7 @@ const ProductParametersForm = ({
                         value={form.vat}
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
-                            if (params.inputValue !== "") {
-                                filtered.push({ label: `Create "${params.inputValue}"`, inputValue: params.inputValue, isNew: true });
-                            }
+                            filtered.unshift({ isNew: true, inputValue: "" });
                             return filtered;
                         }}
                         onChange={(_, value) => {
@@ -209,8 +273,13 @@ const ProductParametersForm = ({
                             }
                         }}
                         renderOption={(props, option) => (
-                            <li {...props} key={option?.idVat ?? option?.inputValue}>
-                                {option?.isNew ? <em>{option.label}</em> : `${option.country} - ${(option.vatRate * 100).toFixed(0)}%`}
+                            <li {...props} key={option?.idVat ?? "create-vat"}>
+                                {option?.isNew
+                                    ? <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "primary.main" }}>
+                                        <AddIcon fontSize="small" /> Create new VAT
+                                    </Box>
+                                    : `${option.country} - ${(option.vatRate * 100).toFixed(0)}%`
+                                }
                             </li>
                         )}
                         renderInput={(params) => <TextField {...params} label="VAT" fullWidth />}

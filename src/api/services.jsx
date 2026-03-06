@@ -9,15 +9,22 @@ const Services = {
   BO_INACTIVATE_PRODUCT: `/bo/product/inactivate`,
   BO_SAVE_PRODUCT: `/bo/product/save`,
 
-  GET_ALL_CONTACTS : `/contact`,
-  GET_ID_CONTACT : `/contact`,
-  INACTIVATE_CONTACT : `/contact/inactivate`,
-  PUT_ID_CONTACT : `/contact`,
+  BO_GET_ALL_VATS: "/bo/vat",
+  BO_SAVE_VAT: "/bo/vat/save",
+  BO_INACTIVATE_VAT: "/bo/vat/inactivate",
 
-  GET_ALL_PRODUCTS : `/product`,
-  GET_ID_PRODUCT : `/product`,
-  PUT_ID_PRODUCT : `/product`,
-  INACTIVATE_PRODUCT : `/product/inactivate`,
+  BO_GET_ALL_COLORS: "/bo/color",
+  BO_SAVE_COLOR: "/bo/color/save",
+  BO_INACTIVATE_COLOR: "/bo/color/inactivate",
+
+  BO_GET_ALL_STORES: "/bo/store",
+  BO_SAVE_STORE: "/bo/store/save",
+  BO_INACTIVATE_STORE: "/bo/store/inactivate",
+
+  BO_GET_ALL_PRODUCT_PARAMETERS: "/bo/product-parameter",
+  BO_GET_PRODUCT_PARAMETERS_BY_PRODUCT: "/bo/product-parameter/product",
+  BO_SAVE_PRODUCT_PARAMETER: "/bo/product-parameter/save",
+  BO_INACTIVATE_PRODUCT_PARAMETER: "/bo/product-parameter/inactivate",
 
   GET_ALL_ORDER_PRODUCTS : `/orderProduct`,
   GET_ID_ORDER_PRODUCT : `/orderProduct`,

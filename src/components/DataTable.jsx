@@ -189,9 +189,13 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
                     onRowSelection && onRowSelection(selectedRow || null);
                 }}
                 sx={{
+                    backgroundColor: colors.primary[500],
                     '.MuiDataGrid-footerContainer': { backgroundColor: colors.primary[500] },
                     '.MuiDataGrid-row': { backgroundColor: alpha(colors.primary[500], 0.6) },
                     '& .MuiDataGrid-virtualScroller': { backgroundColor: alpha(colors.primary[500], 0.6) },
+                    '& .MuiDataGrid-columnHeaders': { backgroundColor: colors.primary[500] },
+                    '& .MuiDataGrid-columnHeader': { backgroundColor: colors.primary[500] },
+                    '& .MuiDataGrid-filler': { backgroundColor: colors.primary[500] },
                 }}
                 isCellEditable={(params) => {
                     if (!allowRowEditOnGrid) return false;

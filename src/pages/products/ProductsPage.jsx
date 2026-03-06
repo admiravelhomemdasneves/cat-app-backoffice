@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { ProductsStore } from "./ProductsStore";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "../../components/Header";
 import DataTable from "../../components/DataTable";
 import ProductForm from "./components/ProductForm";

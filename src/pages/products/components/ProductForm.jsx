@@ -6,7 +6,7 @@ import { ProductParametersStore } from "../ProductParametersStore";
 
 const ProductForm = ({ initialData = {}, onChange }) => {
     const {
-        rowIdField, updateHook, deleteHook,
+        rowIdField,
         columnsDefinition, sampleRow,
         storeOptions, colorOptions, vatOptions,
         createColor, createVat,
@@ -33,17 +33,20 @@ const ProductForm = ({ initialData = {}, onChange }) => {
     };
 
     const handleParameterUpdate = (updatedParam) => {
-        const updatedParameters = form.parameters.map((p) =>
-            p[rowIdField] === updatedParam[rowIdField] ? updatedParam : p
-        );
-        handleChange("parameters", updatedParameters);
-        updateHook(updatedParam);
+        const exists = (form.parameters || []).some((p) => p[rowIdField] === updatedParam[rowIdField]);
+        const updatedParameters = exists
+            ? (form.parameters || []).map((p) => p[rowIdField] === updatedParam[rowIdField] ? updatedParam : p)
+            : [...(form.parameters || []), updatedParam];
+        const updated = { ...form, parameters: updatedParameters };
+        setForm(updated);
+        onChange?.(updated);
     };
 
     const handleParameterDelete = (id) => {
-        const updatedParameters = form.parameters.filter((p) => p[rowIdField] !== id);
-        handleChange("parameters", updatedParameters);
-        deleteHook(id);
+        const updatedParameters = (form.parameters || []).filter((p) => p[rowIdField] !== id);
+        const updated = { ...form, parameters: updatedParameters };
+        setForm(updated);
+        onChange?.(updated);
     };
 
     return (
@@ -84,8 +87,8 @@ const ProductForm = ({ initialData = {}, onChange }) => {
                         columnsDefinition={columnsDefinition}
                         sampleRow={sampleRow}
                         rowIdField={rowIdField}
-                        updateHook={handleParameterUpdate}
-                        deleteHook={handleParameterDelete}
+                        updateHook={handleParameterUpdate}  // ← local state only, no API call
+                        deleteHook={handleParameterDelete}  // ← local state only, no API call
                         allowRowEditOnGrid={false}
                         addRecordComponent={({ initialData: paramInitialData, onChange: paramOnChange }) => (
                             <ProductParametersForm
