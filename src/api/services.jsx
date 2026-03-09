@@ -21,11 +21,6 @@ const Services = {
   BO_SAVE_STORE: "/bo/store/save",
   BO_INACTIVATE_STORE: "/bo/store/inactivate",
 
-  BO_GET_ALL_PRODUCT_PARAMETERS: "/bo/product-parameter",
-  BO_GET_PRODUCT_PARAMETERS_BY_PRODUCT: "/bo/product-parameter/product",
-  BO_SAVE_PRODUCT_PARAMETER: "/bo/product-parameter/save",
-  BO_INACTIVATE_PRODUCT_PARAMETER: "/bo/product-parameter/inactivate",
-
   GET_ALL_ORDER_PRODUCTS : `/orderProduct`,
   GET_ID_ORDER_PRODUCT : `/orderProduct`,
   PUT_ID_ORDER_PRODUCT : `/orderProduct`,

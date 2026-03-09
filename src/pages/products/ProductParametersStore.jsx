@@ -1,7 +1,6 @@
 import { useGetStores } from "../../api/stores/getStores";
 import { useGetColors } from "../../api/colors/getColors";
 import { useGetVats } from "../../api/vats/getVats";
-import { useUpdateProductParameter, useInactivateProductParameter } from "../../api/productParameters/createProductParameters";
 import { useCreateColor } from "../../api/colors/createColors";
 import { useCreateVat } from "../../api/vats/createVats";
 
@@ -9,15 +8,11 @@ export const ProductParametersStore = () => {
     const storeOptions = useGetStores() || [];
     const colorOptions = useGetColors() || [];
     const vatOptions = useGetVats() || [];
-    const { mutate: updateProductParameter } = useUpdateProductParameter();
-    const { mutate: inactivateProductParameter } = useInactivateProductParameter();
     const { mutate: createColor } = useCreateColor();
     const { mutate: createVat } = useCreateVat();
 
     return {
         rowIdField: "idProductParameter",
-        updateHook: updateProductParameter,
-        deleteHook: inactivateProductParameter,
         storeOptions,
         colorOptions,
         vatOptions,
