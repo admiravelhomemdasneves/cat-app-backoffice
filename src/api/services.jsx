@@ -1,13 +1,13 @@
 const Services = {
   POST_LOGIN: `/auth/login`,
 
-  BO_GET_ALL_CONTACTS: `/bo/contact`,
-  BO_SAVE_CONTACT: `/bo/contact/save`,
-  BO_INACTIVATE_CONTACT: `/bo/contact/inactivate`,
+  BO_GET_ALL_CONTACTS: "/bo/contact",
+  BO_SAVE_CONTACT: "/bo/contact/save",
+  BO_INACTIVATE_CONTACT: "/bo/contact/inactivate",
 
-  BO_GET_ALL_PRODUCTS: `/bo/product`,
-  BO_INACTIVATE_PRODUCT: `/bo/product/inactivate`,
-  BO_SAVE_PRODUCT: `/bo/product/save`,
+  BO_GET_ALL_PRODUCTS: "/bo/product",
+  BO_INACTIVATE_PRODUCT: "/bo/product/inactivate",
+  BO_SAVE_PRODUCT: "/bo/product/save",
 
   BO_GET_ALL_VATS: "/bo/vat",
   BO_SAVE_VAT: "/bo/vat/save",
@@ -20,6 +20,8 @@ const Services = {
   BO_GET_ALL_STORES: "/bo/store",
   BO_SAVE_STORE: "/bo/store/save",
   BO_INACTIVATE_STORE: "/bo/store/inactivate",
+
+  BO_GET_ALL_PRODUCT_PARAMETERS: "/bo/product/parameters", 
 
   GET_ALL_ORDER_PRODUCTS : `/orderProduct`,
   GET_ID_ORDER_PRODUCT : `/orderProduct`,
