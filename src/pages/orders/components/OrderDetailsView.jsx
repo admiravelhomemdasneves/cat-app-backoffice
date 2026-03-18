@@ -28,7 +28,7 @@ const OrderDetailsView = ({
     }, [order]);
 
     const handleProductUpdate = (row) => {
-        const updatedRow = { ...row, order: { id_order: order.id_order } };
+        const updatedRow = { ...row, order: { idOrder: order.idOrder } };
         productUpdateHook(updatedRow);
     };
 

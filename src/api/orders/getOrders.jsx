@@ -6,7 +6,7 @@ export const useGetOrders = () => {
     const { isPending, error, data } = useQuery({
         queryKey: ['orders'],
         queryFn: async () => {
-            const response = await apiClient.get(Services.GET_ALL_ORDERS);
+            const response = await apiClient.get(Services.BO_GET_ALL_ORDERS);
             return response;
     }})
 

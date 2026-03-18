@@ -35,13 +35,14 @@ const StablePaper = React.memo(function StablePaper(props) {
   return (
     <Paper
       elevation={4}
-      sx={{ display: "flex", width, borderRadius: 2 }}
+      sx={{ display: "flex", width, borderRadius: 2, minHeight: 220 }}
       {...paperProps}
     >
       <Box sx={{ flex: 1 }}>{children}</Box>
       <Box
         sx={{
           width: previewWidth,
+          height: 220,
           borderLeft: "1px solid #e0e0e0",
           p: 2,
           display: "flex",
@@ -62,6 +63,7 @@ const AutocompleteImagePreview = ({
   onChange,
   width = 500,
   previewWidth = 220,
+  idField = null,
   ...props
 }) => {
   // Emitter and PaperComponent are created once per mount.
@@ -88,14 +90,15 @@ const AutocompleteImagePreview = ({
       autoComplete
       options={products}
       value={value}
-      getOptionKey={(option) => option.id_product}
-      getOptionLabel={(option) => option ? `${option.brand || ""} - ${option.name || ""}` : ""}
-      isOptionEqualToValue={(option, val) => option.id_product === val?.id_product}
+      getOptionKey={(option) => option[idField]}
+      getOptionLabel={(option) => option ? option.name : ""}
+      isOptionEqualToValue={(option, val) => option[idField] === val?.[idField]}
       onChange={(_, newValue) => onChange?.(newValue)}
       onHighlightChange={(_, option) => emitter.emit(option ?? null)}
       ListboxProps={{ style: { maxHeight: 300, overflowY: "scroll" } }}
       PaperComponent={PaperComponent}
       renderInput={(params) => <TextField {...params} size="small" />}
+      filterOptions={(options) => options}  // ← disable filtering, always show all options
       {...props}
     />
   );
