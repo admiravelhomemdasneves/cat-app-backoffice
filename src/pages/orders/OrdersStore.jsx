@@ -2,10 +2,10 @@ import { useGetOrders } from "../../api/orders/getOrders";
 import { useGetOrderStatus } from '../../api/orderStatus/getOrderStatus';
 import { useGetContacts } from '../../api/contacts/getContacts';
 import { useGetPriorities } from '../../api/priorities/getPriorities';
-import { useUpdateOrder, useInactivateOrder } from "../../api/orders/createOrder";
+import { useUpdateOrderDTO, useInactivateOrder } from "../../api/orders/createOrder";
 import { useGetProductParameters } from '../../api/products/getProducts';
 import { useGetPrintingServices } from '../../api/printingServices/getPrintingServices';
-import { useUpdateOrderProduct, useInactivateOrderProduct } from '../../api/orderProducts/createOrderProducts';
+import { useUpdateOrderItemDTO, useInactivateOrderProduct } from '../../api/orderProducts/createOrderProducts';
 import AutocompleteProductSelector from "./components/AutocompleteProductSelector";
 
 export const OrdersStore = () => {
@@ -13,7 +13,7 @@ export const OrdersStore = () => {
     const orderStatus = useGetOrderStatus();
     const contacts = useGetContacts();
     const priorities = useGetPriorities();
-    const { mutate: updateOrder } = useUpdateOrder();
+    const { mutate: updateOrder } = useUpdateOrderDTO();
     const { mutate: inactivateOrder } = useInactivateOrder();
     const contactsOptions = contacts && contacts.map(entry => ({ id: entry.idContact, label: `${entry.firstName || " "} ${entry.lastName || " "}`, value: entry }));
     const statusOptions = orderStatus && orderStatus.map(entry => ({ id: entry.id_status, label: entry.name, value: entry }));
@@ -99,8 +99,8 @@ export const OrdersStore = () => {
 export const OrderDetailStore = () => {
     const products = useGetProductParameters();
     const printingServices = useGetPrintingServices();
-    const { mutate: updateOrderProduct } = useUpdateOrderProduct();
-    const { mutate: inactivateOrderProduct } = useInactivateOrderProduct();
+    const { mutate: updateOrderProduct } = useUpdateOrderItemDTO();
+    const { mutate: inactivateOrderProduct } = useInactivateOrderProduct(); 
 
     const distinctProducts = Object.values(
         (products ?? []).reduce((acc, param) => {

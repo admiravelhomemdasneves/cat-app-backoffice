@@ -2,6 +2,8 @@ const Services = {
   POST_LOGIN: `/auth/login`,
 
   BO_GET_ALL_ORDERS : "/bo/orders",
+  BO_SAVE_ORDER : "/bo/orders/save",
+  BO_SAVE_ORDER_ITEM : "/bo/orderitems/save",
 
   BO_GET_ALL_CONTACTS: "/bo/contact",
   BO_SAVE_CONTACT: "/bo/contact/save",

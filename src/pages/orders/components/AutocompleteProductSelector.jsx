@@ -206,6 +206,7 @@ const AutocompleteProductSelector = ({
 
     return (
         <Autocomplete
+            autoComplete
             fullWidth
             open={isOpen}
             onOpen={() => setIsOpen(true)}

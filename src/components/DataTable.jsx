@@ -116,7 +116,6 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
         pendingEditRef.current = null;
     };
 
-    // ---- EXISTING HANDLERS ----
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
@@ -139,6 +138,7 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
     };
 
     const processRowUpdate = (newRow) => {
+        console.log("processRowUpdate", newRow);
         updateHook(newRow);
         return newRow;
     };
