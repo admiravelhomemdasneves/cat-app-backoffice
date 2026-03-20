@@ -6,7 +6,18 @@ export const useGetProducts = () => {
     const { isPending, error, data } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
-        const response = await apiClient.get(Services.GET_ALL_PRODUCTS);
+        const response = await apiClient.get(Services.BO_GET_ALL_PRODUCTS);
+        return response;
+    }})
+
+    if (!isPending && !error && data) return data;
+};
+
+export const useGetProductParameters = () => {
+    const { isPending, error, data } = useQuery({
+        queryKey: ['productsParameters'],
+        queryFn: async () => {
+        const response = await apiClient.get(Services.BO_GET_ALL_PRODUCT_PARAMETERS);
         return response;
     }})
 

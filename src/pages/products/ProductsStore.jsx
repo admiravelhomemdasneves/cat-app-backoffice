@@ -9,39 +9,51 @@ export const ProductsStore = () => {
     return {
         pageTitle: "PRODUCTS",
         pageSubtitle: "Welcome to your products page",
-        rowIdField : 'id_product',
-        gridData : gridData || [],
-        updateHook : updateProduct,
-        deleteHook : inactivateProduct,
+        rowIdField: 'idProduct',
+        gridData: gridData || [],
+        updateHook: updateProduct,
+        deleteHook: inactivateProduct,
         columnsDefinition: [
+            {
+                field: "catalogReference",
+                headerName: "REFERENCE",
+                editable: true,
+                flex: 1
+            },
             {
                 field: "name",
                 headerName: "NAME",
                 editable: true,
+                flex: 1
             },
             {
                 field: "brand",
                 headerName: "BRAND",
                 editable: true,
+                flex: 1
             },
             {
-                field: "product_type",
+                field: "productType",
                 headerName: "PRODUCT TYPE",
                 editable: true,
+                flex: 1
             },
             {
                 field: "description",
                 headerName: "DESCRIPTION",
                 editable: true,
+                flex: 1
             },
         ],
         sampleRow: {
-            "id_product": null,
-            "name": "",
-            "brand": "",
-            "product_type": "",
-            "description": "",
-            "flagActive": true
+            idProduct: null,
+            catalogReference: "",
+            name: "",
+            brand: "",
+            productType: "",
+            description: "",
+            parameters: [],
+            flagActive: true
         }
     };
 }

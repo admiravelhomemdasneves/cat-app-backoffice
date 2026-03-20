@@ -1,0 +1,232 @@
+import React from "react";
+import { Grid, TextField, Typography, Box } from "@mui/material";
+
+const ContactForm = ({ initialData = {}, onChange }) => {
+    const [form, setForm] = React.useState(() => {
+        const defaults = {
+            idContact: null,
+            firstName: "",
+            lastName: "",
+            nif: "",
+            phoneNumber: "",
+            email: "",
+            shippingAddress: {
+                id_address: null, street: "", door_number: "", zip_code: "", city: "", country: "", addressType: "Shipping", flagActive: true,
+            },
+            billingAddress: {
+                id_address: null, street: "", door_number: "", zip_code: "", city: "", country: "", addressType: "Billing", flagActive: true,
+            },
+        };
+
+        return {
+            ...defaults,
+            ...initialData,
+            shippingAddress: initialData?.shippingAddress ?? defaults.shippingAddress,
+            billingAddress: initialData?.billingAddress ?? defaults.billingAddress,
+        };
+    });
+
+  const handleChange = (field, value) => {
+    const updated = { ...form, [field]: value };
+    setForm(updated);
+    onChange?.(updated);
+  };
+
+  const handleAddressChange = (type, field, value) => {
+    const updated = {
+      ...form,
+      [type]: {
+        ...form[type],
+        [field]: value,
+      },
+    };
+
+    setForm(updated);
+    onChange?.(updated);
+  };
+
+  return (
+    <Box>
+      <Grid container spacing={3}>
+
+        {/* First + Last Name */}
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="First Name"
+            value={form.firstName}
+            onChange={(e) => handleChange("firstName", e.target.value)}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="Last Name"
+            value={form.lastName}
+            onChange={(e) => handleChange("lastName", e.target.value)}
+          />
+        </Grid>
+
+        {/* Other Contact Fields */}
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="NIF"
+            value={form.nif}
+            onChange={(e) => handleChange("nif", e.target.value)}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Phone Number"
+            value={form.phoneNumber}
+            onChange={(e) => handleChange("phoneNumber", e.target.value)}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Email"
+            value={form.email}
+            onChange={(e) => handleChange("email", e.target.value)}
+          />
+        </Grid>
+
+        {/* SHIPPING ADDRESS */}
+        <Grid item xs={12}>
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Shipping Address
+          </Typography>
+        </Grid>
+
+        {/* Street + Door */}
+        <Grid item xs={8}>
+          <TextField
+            fullWidth
+            label="Street"
+            value={form.shippingAddress.street}
+            onChange={(e) =>
+              handleAddressChange("shippingAddress", "street", e.target.value)
+            }
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="Door Number"
+            value={form.shippingAddress.door_number}
+            onChange={(e) =>
+              handleAddressChange("shippingAddress", "door_number", e.target.value)
+            }
+          />
+        </Grid>
+
+        {/* Zip + City + Country */}
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="Zip Code"
+            value={form.shippingAddress.zip_code}
+            onChange={(e) =>
+              handleAddressChange("shippingAddress", "zip_code", e.target.value)
+            }
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="City"
+            value={form.shippingAddress.city}
+            onChange={(e) =>
+              handleAddressChange("shippingAddress", "city", e.target.value)
+            }
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="Country"
+            value={form.shippingAddress.country}
+            onChange={(e) =>
+              handleAddressChange("shippingAddress", "country", e.target.value)
+            }
+          />
+        </Grid>
+
+        {/* BILLING ADDRESS */}
+        <Grid item xs={12}>
+          <Typography variant="h6" sx={{ mt: 4 }}>
+            Billing Address
+          </Typography>
+        </Grid>
+
+        {/* Street + Door */}
+        <Grid item xs={8}>
+          <TextField
+            fullWidth
+            label="Street"
+            value={form.billingAddress.street}
+            onChange={(e) =>
+              handleAddressChange("billingAddress", "street", e.target.value)
+            }
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="Door Number"
+            value={form.billingAddress.door_number}
+            onChange={(e) =>
+              handleAddressChange("billingAddress", "door_number", e.target.value)
+            }
+          />
+        </Grid>
+
+        {/* Zip + City + Country */}
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="Zip Code"
+            value={form.billingAddress.zip_code}
+            onChange={(e) =>
+              handleAddressChange("billingAddress", "zip_code", e.target.value)
+            }
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="City"
+            value={form.billingAddress.city}
+            onChange={(e) =>
+              handleAddressChange("billingAddress", "city", e.target.value)
+            }
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            label="Country"
+            value={form.billingAddress.country}
+            onChange={(e) =>
+              handleAddressChange("billingAddress", "country", e.target.value)
+            }
+          />
+        </Grid>
+
+      </Grid>
+    </Box>
+  );
+};
+
+export default ContactForm;

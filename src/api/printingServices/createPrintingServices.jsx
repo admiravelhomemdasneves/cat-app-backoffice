@@ -8,7 +8,7 @@ export const useUpdatePrintingService = (data) => {
     return useMutation({
         mutationFn: async (data) => { return await apiClient.post(Services.PUT_ID_PRINTING_SERVICE, data); },
         onSuccess: () => { queryClient.invalidateQueries('printingServices'); },
-        onError: (err) => { console.log("ERROR UPDATING ROW", err); }
+        //onError: (err) => { console.log("ERROR UPDATING ROW", err); }
     });
 };
 
@@ -18,6 +18,6 @@ export const useInactivatePrintingService = (id) => {
     return useMutation({
         mutationFn: async (id) => { return await apiClient.get(Services.INACTIVATE_PRINTING_SERVICE + "/" + id); },
         onSuccess: () => { queryClient.invalidateQueries('printingServices'); },
-        onError: (err) => { console.log("ERROR UPDATING ROW", err); }
+        //onError: (err) => { console.log("ERROR UPDATING ROW", err); }
     });
 };

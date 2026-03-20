@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080';
-//const BASE_URL = 'https://cat-app-g9audugfc0fmdpax.westeurope-01.azurewebsites.net';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 class ApiClient {
   constructor() {
