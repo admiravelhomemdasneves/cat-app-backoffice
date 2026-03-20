@@ -8,26 +8,16 @@ export const useUpdateOrderItemDTO = (data) => {
     return useMutation({
         mutationFn: async (data) => { return await apiClient.post(Services.BO_SAVE_ORDER_ITEM, data); },
         onSuccess: () => { queryClient.invalidateQueries(['orders','orderProducts']); },
-        onError: (err) => { console.log("ERROR UPDATING ROW", err); }
+        //onError: (err) => { console.log("ERROR UPDATING ROW", err); }
     });
 };
 
-export const useUpdateOrderProduct = (data) => {
+export const useInactivateOrderItem = (id) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data) => { return await apiClient.post(Services.PUT_ID_ORDER_PRODUCT, data); },
+        mutationFn: async (id) => { return await apiClient.get(Services.BO_INACTIVATE_ORDER_ITEM + "/" + id); },
         onSuccess: () => { queryClient.invalidateQueries(['orders','orderProducts']); },
-        onError: (err) => { console.log("ERROR UPDATING ROW", err); }
-    });
-};
-
-export const useInactivateOrderProduct = (id) => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async (id) => { return await apiClient.get(Services.ORDER_PRODUCT_INACTIVATE + "/" + id); },
-        onSuccess: () => { queryClient.invalidateQueries(['orders','orderProducts']); },
-        onError: (err) => { console.log("ERROR UPDATING ROW", err); }
+        //onError: (err) => { console.log("ERROR UPDATING ROW", err); }
     });
 };

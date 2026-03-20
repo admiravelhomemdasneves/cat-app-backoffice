@@ -5,7 +5,7 @@ import { useGetPriorities } from '../../api/priorities/getPriorities';
 import { useUpdateOrderDTO, useInactivateOrder } from "../../api/orders/createOrder";
 import { useGetProductParameters } from '../../api/products/getProducts';
 import { useGetPrintingServices } from '../../api/printingServices/getPrintingServices';
-import { useUpdateOrderItemDTO, useInactivateOrderProduct } from '../../api/orderProducts/createOrderProducts';
+import { useUpdateOrderItemDTO, useInactivateOrderItem } from '../../api/orderProducts/createOrderProducts';
 import AutocompleteProductSelector from "./components/AutocompleteProductSelector";
 
 export const OrdersStore = () => {
@@ -100,7 +100,7 @@ export const OrderDetailStore = () => {
     const products = useGetProductParameters();
     const printingServices = useGetPrintingServices();
     const { mutate: updateOrderProduct } = useUpdateOrderItemDTO();
-    const { mutate: inactivateOrderProduct } = useInactivateOrderProduct(); 
+    const { mutate: inactivateOrderProduct } = useInactivateOrderItem(); 
 
     const distinctProducts = Object.values(
         (products ?? []).reduce((acc, param) => {

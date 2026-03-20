@@ -8,7 +8,9 @@ import OrderDetailsView from "./components/OrderDetailsView";
 const OrdersPage = () => {
   const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions} = OrdersStore();
   const {detailRowIdField, detailUpdateHook, detailDeleteHook, detailColumnsDefinition, detailSampleRow} = OrderDetailStore();
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const selectedOrder = gridData.find(o => o[rowIdField] === selectedOrderId) ?? null;
+
   const gridSize = selectedOrder ? 5 : 12;
 
   return (
@@ -26,7 +28,7 @@ const OrdersPage = () => {
             rowIdField={rowIdField}
             updateHook={updateHook}
             deleteHook={deleteHook}
-            onRowSelection={setSelectedOrder}
+            onRowSelection={(row) => setSelectedOrderId(row?.[rowIdField] ?? null)}
           />
         </Grid>
         {selectedOrder && (

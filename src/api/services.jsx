@@ -3,6 +3,8 @@ const Services = {
 
   BO_GET_ALL_ORDERS : "/bo/orders",
   BO_SAVE_ORDER : "/bo/orders/save",
+
+  BO_INACTIVATE_ORDER_ITEM: "/bo/orderitems/inactivate",
   BO_SAVE_ORDER_ITEM : "/bo/orderitems/save",
 
   BO_GET_ALL_CONTACTS: "/bo/contact",
@@ -26,6 +28,8 @@ const Services = {
   BO_INACTIVATE_STORE: "/bo/store/inactivate",
 
   BO_GET_ALL_PRODUCT_PARAMETERS: "/bo/product/parameters", 
+
+
 
   GET_ALL_ORDER_PRODUCTS : `/orderProduct`,
   GET_ID_ORDER_PRODUCT : `/orderProduct`,

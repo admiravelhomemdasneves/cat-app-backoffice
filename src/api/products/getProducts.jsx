@@ -15,7 +15,7 @@ export const useGetProducts = () => {
 
 export const useGetProductParameters = () => {
     const { isPending, error, data } = useQuery({
-        queryKey: ['products'],
+        queryKey: ['productsParameters'],
         queryFn: async () => {
         const response = await apiClient.get(Services.BO_GET_ALL_PRODUCT_PARAMETERS);
         return response;

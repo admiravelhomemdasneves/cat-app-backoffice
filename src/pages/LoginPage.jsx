@@ -35,7 +35,7 @@ const LoginPage = () => {
             } else {
                 setErrMsg('Login Failed');
             }
-            console.log("err: ", err);
+            //console.log("err: ", err);
         };
     }
 

@@ -138,7 +138,6 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
     };
 
     const processRowUpdate = (newRow) => {
-        console.log("processRowUpdate", newRow);
         updateHook(newRow);
         return newRow;
     };
@@ -183,7 +182,7 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
                 columns={columns}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
-                onProcessRowUpdateError={(error) => console.log("ERROR UPDATING ROW", error)}
+                //onProcessRowUpdateError={(error) => console.log("ERROR UPDATING ROW", error)}
                 onRowSelectionModelChange={(newSelection) => {
                     const selectedRow = gridData.find(row => row[rowIdField] === newSelection[0]);
                     onRowSelection && onRowSelection(selectedRow || null);

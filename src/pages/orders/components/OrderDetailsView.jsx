@@ -21,7 +21,6 @@ const OrderDetailsView = ({
 
     const [orderData, setOrderData] = useState(order);
     const [products, setProducts] = useState([]);
-    const [description, setDescription] = useState(order?.description ?? "");
 
     useEffect(() => {
         setOrderData(order);
@@ -49,6 +48,7 @@ const OrderDetailsView = ({
                         <Grid item xs={6}>
                             <Autocomplete
                                 value={orderData && orderData.status && orderData.status.name ? orderData.status.name : "Vazio"}
+                                getOptionKey={(option) => typeof option === "string" ? option : option.id}
                                 options={[{id: -1, label: 'Vazio'}, ...statusOptions]}
                                 onChange={(event, value) => {
                                     const updatedOrder = { ...orderData, status: value?.value || {id: -1, label: 'Vazio'} };
@@ -76,6 +76,7 @@ const OrderDetailsView = ({
                         <Grid item xs={6}>
                             <Autocomplete
                                 value={orderData && orderData.priority && orderData.priority.name ? orderData.priority.name : "Vazio"}
+                                getOptionKey={(option) => typeof option === "string" ? option : option.id}
                                 options={[{id: -1, label: 'Vazio'}, ...prioritiesOptions]}
                                 onChange={(event, value) => {
                                     const updatedOrder = { ...orderData, priority: value?.value || {id: -1, label: 'Vazio'} };
@@ -102,9 +103,10 @@ const OrderDetailsView = ({
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                value={order?.dateRequested && new Date(order?.dateRequested).toLocaleDateString("en-GB")}
+                                value={(order?.dateRequested && new Date(order.dateRequested).toISOString().split("T")[0]) ?? ""}
                                 label="Creation Date"
                                 variant="outlined"
+                                type="date"
                                 fullWidth
                                 size="small"
                                 disabled
@@ -165,6 +167,7 @@ const OrderDetailsView = ({
                         <Grid item xs={6}>
                             <Autocomplete
                                 value={`${orderData?.contact?.firstName ?? ""} ${orderData?.contact?.lastName ?? ""}`.trim() || "Vazio"}
+                                getOptionKey={(option) => typeof option === "string" ? option : option.id}
                                 options={[{id: -1, label: 'Vazio'}, ...contactOptions]}
                                 onChange={(event, value) => {
                                     const updatedOrder = { ...orderData, contact: value?.value || {id: -1, label: 'Vazio'} };
@@ -179,7 +182,7 @@ const OrderDetailsView = ({
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                value={`${orderData?.contact?.nif}` || "Vazio"}
+                                value={orderData?.contact?.nif ?? ""}
                                 label="NIF"
                                 variant="outlined"
                                 fullWidth
@@ -192,7 +195,7 @@ const OrderDetailsView = ({
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                value={`${orderData?.contact?.phoneNumber}` || "Vazio"}
+                                value={orderData?.contact?.phoneNumber ?? ""}
                                 label="Phone Number"
                                 variant="outlined"
                                 fullWidth
@@ -205,7 +208,7 @@ const OrderDetailsView = ({
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                value={`${orderData?.contact?.email}` || "Vazio"}
+                                value={orderData?.contact?.email ?? ""}
                                 label="Email"
                                 variant="outlined"
                                 fullWidth

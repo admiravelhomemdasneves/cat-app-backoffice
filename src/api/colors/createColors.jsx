@@ -8,7 +8,7 @@ export const useCreateColor = () => {
     return useMutation({
         mutationFn: async (data) => { return await apiClient.post(Services.BO_SAVE_COLOR, data); },
         onSuccess: () => { queryClient.invalidateQueries('colors'); },
-        onError: (err) => { console.log("ERROR SAVING COLOR", err); }
+        //onError: (err) => { console.log("ERROR SAVING COLOR", err); }
     });
 };
 
@@ -18,6 +18,6 @@ export const useInactivateColor = () => {
     return useMutation({
         mutationFn: async (id) => { return await apiClient.get(Services.BO_INACTIVATE_COLOR + "/" + id); },
         onSuccess: () => { queryClient.invalidateQueries('colors'); },
-        onError: (err) => { console.log("ERROR INACTIVATING COLOR", err); }
+        //onError: (err) => { console.log("ERROR INACTIVATING COLOR", err); }
     });
 };

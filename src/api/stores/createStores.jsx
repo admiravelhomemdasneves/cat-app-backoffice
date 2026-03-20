@@ -8,7 +8,7 @@ export const useCreateStore = () => {
     return useMutation({
         mutationFn: async (data) => { return await apiClient.post(Services.BO_SAVE_STORE, data); },
         onSuccess: () => { queryClient.invalidateQueries('stores'); },
-        onError: (err) => { console.log("ERROR SAVING STORE", err); }
+        //onError: (err) => { console.log("ERROR SAVING STORE", err); }
     });
 };
 
@@ -18,6 +18,6 @@ export const useInactivateStore = () => {
     return useMutation({
         mutationFn: async (id) => { return await apiClient.get(Services.BO_INACTIVATE_STORE + "/" + id); },
         onSuccess: () => { queryClient.invalidateQueries('stores'); },
-        onError: (err) => { console.log("ERROR INACTIVATING STORE", err); }
+        //onError: (err) => { console.log("ERROR INACTIVATING STORE", err); }
     });
 };
