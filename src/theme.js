@@ -103,8 +103,8 @@ export const tokens = (mode) => ({
             500: "#ff8000",
             600: "#ff802b",
             700: "#ff944d",
-            800: "#ffbf94",
-            900: "#ffdfc9",
+            800: "#fae1d0",
+            900: "#f2e6de",
         },
         greenAccent: {
             100: "#dbf5ee",
@@ -225,6 +225,7 @@ export const themeSettings = (mode) => {
             },
         },
         components: {
+            /*
             MuiCssBaseline: {
                 styleOverrides: {
                     body: {
@@ -233,6 +234,18 @@ export const themeSettings = (mode) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     minHeight: '100vh',
+                    },
+                },
+            },
+            */
+           MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                        background: mode === 'dark'
+                            ? `linear-gradient(135deg, ${colors.primary[500]} 0%, ${colors.primary[400]} 50%, ${colors.primary[600]} 100%)`
+                            : `linear-gradient(135deg, ${colors.secondary[800]} 0%, ${colors.secondary[900]} 50%, ${colors.secondary[800]} 100%)`,
+                        backgroundAttachment: 'fixed',  // ← prevents tiling/cutoff when page scrolls
+                        minHeight: '100vh',
                     },
                 },
             },

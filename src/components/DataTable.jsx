@@ -191,7 +191,7 @@ const DataTable = ({
     };
 
     return (
-        <>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <DataGrid
                 slots={{ toolbar: gridToolbar }}
                 apiRef={apiRef}
@@ -209,6 +209,7 @@ const DataTable = ({
                     onRowSelection && onRowSelection(selectedRow || null);
                 }}
                 sx={{
+                    height: '100%',
                     backgroundColor: colors.primary[500],
                     '.MuiDataGrid-footerContainer': { backgroundColor: colors.primary[500] },
                     '.MuiDataGrid-row': { backgroundColor: alpha(colors.primary[500], 0.6) },
@@ -224,7 +225,9 @@ const DataTable = ({
                 onCellDoubleClick={(params, event) => {
                     if (!allowRowEditOnGrid) event.defaultMuiPrevented = true;
                 }}
+                pageSizeOptions={[10, 25, 50, 100]}
                 initialState={{
+                    pagination: { paginationModel: { pageSize: 10 } },
                     sorting: {
                         sortModel: initialSortModel
                     }
@@ -266,7 +269,7 @@ const DataTable = ({
                     )}
                 </Modal>
             )}
-        </>
+        </Box>
     );
 }
 

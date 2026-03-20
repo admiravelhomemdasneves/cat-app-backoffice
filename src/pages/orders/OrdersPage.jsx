@@ -21,15 +21,17 @@ const OrdersPage = () => {
       />
       <Grid container spacing={2}>
         <Grid item xs={gridSize}>
-          <DataTable
-            gridData={gridData}
-            columnsDefinition={columnsDefinition}
-            sampleRow={sampleRow}
-            rowIdField={rowIdField}
-            updateHook={updateHook}
-            deleteHook={deleteHook}
-            onRowSelection={(row) => setSelectedOrderId(row?.[rowIdField] ?? null)}
-          />
+          <Box sx={{ flex: 1, height: '700px' }}>
+            <DataTable
+              gridData={gridData}
+              columnsDefinition={columnsDefinition}
+              sampleRow={sampleRow}
+              rowIdField={rowIdField}
+              updateHook={updateHook}
+              deleteHook={deleteHook}
+              onRowSelection={(row) => setSelectedOrderId(row?.[rowIdField] ?? null)}
+            />
+          </Box>
         </Grid>
         {selectedOrder && (
           <Grid item xs={12 - gridSize}>
