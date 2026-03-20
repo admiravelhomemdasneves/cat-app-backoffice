@@ -1,4 +1,4 @@
-import { DataGrid, GridRowModes, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons, useGridApiRef } from "@mui/x-data-grid";
+import { DataGrid, GridRowModes, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridActionsCellItem, GridRowEditStopReasons, useGridApiRef } from "@mui/x-data-grid";
 import { useState, useEffect, useRef } from "react";
 import { Button, alpha, useTheme, Modal, Paper, Box, Divider } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -6,10 +6,17 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import DownloadIcon from '@mui/icons-material/Download';
 import CheckIcon from '@mui/icons-material/Check';
 import { tokens } from "../theme";
+import * as XLSX from 'xlsx';
 
-const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook, onRowSelection, addRecordComponent = null, editRecordComponent = null, allowRowEditOnGrid = true }) => {
+const DataTable = ({ 
+    gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook, 
+    onRowSelection, addRecordComponent = null, editRecordComponent = null, 
+    allowRowEditOnGrid = true,
+    initialSortModel = [],
+}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -35,6 +42,7 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
             width: 100,
             resizable: false,
             cellClassName: 'actions',
+            hideable: false,
             getActions: ({ id }) => {
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -55,8 +63,14 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
 
     const gridToolbar = () => (
         <GridToolbarContainer style={{ backgroundColor: colors.primary[500] }}>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRow}>
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRow} variant="outlined">
                 Add record
+            </Button>
+            <Box sx={{ flex: 1 }} />
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <Button color="primary" startIcon={<DownloadIcon />} onClick={handleExportExcel}>
+                Export
             </Button>
         </GridToolbarContainer>
     );
@@ -169,6 +183,13 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
         </Paper>
     );
 
+    const handleExportExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        XLSX.writeFile(workbook, 'export.xlsx');
+    };
+
     return (
         <>
             <DataGrid
@@ -202,6 +223,19 @@ const DataTable = ({ gridData, columnsDefinition, rowIdField, sampleRow, updateH
                 }}
                 onCellDoubleClick={(params, event) => {
                     if (!allowRowEditOnGrid) event.defaultMuiPrevented = true;
+                }}
+                initialState={{
+                    sorting: {
+                        sortModel: initialSortModel
+                    }
+                }}
+                slotProps={{
+                    columnsManagement: {
+                        anchorEl: null,
+                    },
+                    panel: {
+                        placement: 'bottom-end',  // ← opens below and aligned to the right
+                    },
                 }}
             />
 
