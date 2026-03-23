@@ -2,17 +2,28 @@
 
 html,
 body,
-#root,
-.app,
-.content {
+#root {
   height: 100%;
   width: 100%;
   font-family: 'Source Sans 3', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .app {
   display: flex;
+  min-height: 100%;  /* ← grows with content instead of fixed 100% */
+  width: 100%;
   position: relative;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 100%;
 }
 
 ::-webkit-scrollbar {

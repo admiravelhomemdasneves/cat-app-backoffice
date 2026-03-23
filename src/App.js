@@ -22,22 +22,26 @@ function App() {
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <div className="app">
-            <Sidebar />
-            <main className="content">
-              <Topbar />
-                <Routes>
-                  <Route path="/" element={<DashboardPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/orders" element={<OrdersPage />} />
-                  <Route path="/contacts" element={<ContactsPage />} />
-                  <Route path='/products' element={<ProductsPage />} />
-                  <Route path='/orderStatus' element={<StatusesPage />} />
-                  <Route path='/orderPriority' element={<PrioritiesPage />} />
-                  <Route path='/printingService' element={<PrintingServicesPage />} />
-                </Routes>
-            </main>        
-          </div>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/*" element={
+              <div className="app">
+                <Sidebar />
+                <main className="content">
+                  <Topbar />
+                  <Routes>
+                    <Route path="/" element={<DashboardPage />} />
+                    <Route path="/orders" element={<OrdersPage />} />
+                    <Route path="/contacts" element={<ContactsPage />} />
+                    <Route path="/products" element={<ProductsPage />} />
+                    <Route path="/orderStatus" element={<StatusesPage />} />
+                    <Route path="/orderPriority" element={<PrioritiesPage />} />
+                    <Route path="/printingService" element={<PrintingServicesPage />} />
+                  </Routes>
+                </main>
+              </div>
+            } />
+          </Routes>
         </ThemeProvider>
       </ColorModeContext.Provider>
     </QueryClientProvider>

@@ -18,11 +18,13 @@ export const PrintingServicesStore = () => {
                 field: "name",
                 headerName: "NAME",
                 editable: true,
+                flex: 0.3
             },
             {
                 field: "description",
                 headerName: "DESCRIPTION",
                 editable: true,
+                flex: 1
             },
         ],
         sampleRow: {

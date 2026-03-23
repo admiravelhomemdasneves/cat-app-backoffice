@@ -13,14 +13,16 @@ const PrioritiesPage = () => {
             title={pageTitle} 
             subtitle={pageSubtitle} 
         />
-        <DataTable
-            gridData={gridData}
-            columnsDefinition={columnsDefinition}
-            sampleRow={sampleRow}
-            rowIdField={rowIdField}
-            updateHook={updateHook}
-            deleteHook={deleteHook}
-        />
+        <Box sx={{ flex: 1, height: '700px' }}>
+            <DataTable
+                gridData={gridData}
+                columnsDefinition={columnsDefinition}
+                sampleRow={sampleRow}
+                rowIdField={rowIdField}
+                updateHook={updateHook}
+                deleteHook={deleteHook}
+            />
+        </Box>
         </Box>
     )
 }

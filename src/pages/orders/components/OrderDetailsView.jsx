@@ -56,7 +56,7 @@ const OrderDetailsView = ({
                                     setOrderData(updatedOrder);
                                 }}
                                 renderInput={(params) => {
-                                    const statusColor = orderData?.status?.color ? orderData.status.color : alpha(colors.primary[500], 0.6);
+                                    const statusColor = orderData?.status?.color?.colorCode ? orderData.status.color.colorCode : alpha(colors.primary[500], 0.6);
 
                                     return (
                                         <TextField
@@ -84,7 +84,7 @@ const OrderDetailsView = ({
                                     setOrderData(updatedOrder);
                                 }}
                                 renderInput={(params) => {
-                                    const priorityColor = orderData?.priority?.color ? orderData.priority.color : alpha(colors.primary[500], 0.6);
+                                    const priorityColor = orderData?.priority?.color?.colorCode ? orderData.priority.color.colorCode : alpha(colors.primary[500], 0.6);
 
                                     return (
                                         <TextField

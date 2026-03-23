@@ -38,20 +38,27 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+        minHeight: '100vh',  // ← at least full viewport, grows with content
         "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`,
+            background: `${colors.primary[400]} !important`,
         },
         "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
+            backgroundColor: "transparent !important",
         },
         "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
+            padding: "5px 35px 5px 20px !important",
         },
         "& .pro-inner-item:hover": {
-          color: colors.secondary[500] + " !important",
+            color: colors.secondary[500] + " !important",
         },
         "& .pro-menu-item.active": {
-          color: colors.secondary[400] + " !important",
+            color: colors.secondary[400] + " !important",
+        },
+        "& .pro-sidebar": {
+            height: "100% !important",
+        },
+        "& .pro-sidebar > .pro-sidebar-inner": {
+            height: "100% !important",
         },
       }}
     >
