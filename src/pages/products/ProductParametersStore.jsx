@@ -1,22 +1,17 @@
 import { useGetStores } from "../../api/stores/getStores";
-import { useGetColors } from "../../api/colors/getColors";
 import { useGetVats } from "../../api/vats/getVats";
-import { useCreateColor } from "../../api/colors/createColors";
 import { useCreateVat } from "../../api/vats/createVats";
+import { Box, Typography } from "@mui/material";
 
 export const ProductParametersStore = () => {
     const storeOptions = useGetStores() || [];
-    const colorOptions = useGetColors() || [];
     const vatOptions = useGetVats() || [];
-    const { mutate: createColor } = useCreateColor();
     const { mutate: createVat } = useCreateVat();
 
     return {
         rowIdField: "idProductParameter",
         storeOptions,
-        colorOptions,
         vatOptions,
-        createColor,
         createVat,
         columnsDefinition: [
             { field: "sku", headerName: "SKU", flex: 1 },
@@ -28,10 +23,28 @@ export const ProductParametersStore = () => {
                 valueFormatter: (value) => value?.name ?? "N/A",
             },
             {
-                field: "color",
+                field: "colorName",
                 headerName: "COLOR",
                 flex: 1,
-                valueFormatter: (value) => value?.colorName ?? "N/A",
+                renderCell: (params) => {
+                    const colorCode = params.row.colorCode;
+                    const colorName = params.row.colorName;
+                    if (!colorCode && !colorName) return "N/A";
+                    return (
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            {colorCode && (
+                                <Box sx={{
+                                    width: 16, height: 16, borderRadius: "3px",
+                                    backgroundColor: colorCode,
+                                    border: "1px solid rgba(0,0,0,0.2)",
+                                    flexShrink: 0,
+                                }} />
+                            )}
+                            <Typography variant="body2">{colorName || colorCode}</Typography>
+                        </Box>
+                    );
+                },
+                valueFormatter: (value) => value ?? "N/A",
             },
             {
                 field: "vat",
@@ -58,7 +71,8 @@ export const ProductParametersStore = () => {
             sku: "",
             size: "",
             store: null,
-            color: null,
+            colorName: "",
+            colorCode: null,
             vat: null,
             price: null,
             imageUrl: "",

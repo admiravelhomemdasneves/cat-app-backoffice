@@ -1,93 +1,11 @@
-import React, { useState, useRef } from "react";
-import { Grid, TextField, Box, Typography, Autocomplete, createFilterOptions, Modal, Paper, Divider, Button, InputAdornment, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { Grid, TextField, Box, Typography, Autocomplete, createFilterOptions, Modal, Paper, Divider, Button } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
+import ColorPickerCell from "../../../components/ColorPickerCell";
 
 const filter = createFilterOptions();
-
-const ColorForm = ({ open, initialName, onConfirm, onCancel }) => {
-    const [form, setForm] = React.useState({ colorName: initialName || "", colorCode: "" });
-    const colorInputRef = useRef(null);
-
-    React.useEffect(() => {
-        if (open) setForm({ colorName: initialName || "", colorCode: "" });
-    }, [open, initialName]);
-
-    const handleColorPick = (e) => {
-        setForm(p => ({ ...p, colorCode: e.target.value }));
-    };
-
-    return (
-        <Modal open={open} onClose={onCancel}>
-            <Paper sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 360, borderRadius: 2, overflow: "hidden" }}>
-                <Box sx={{ p: 3 }}>
-                    <Typography variant="h6" mb={2}>New Color</Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Color Name"
-                                value={form.colorName}
-                                onChange={(e) => setForm(p => ({ ...p, colorName: e.target.value }))}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Hidden native color picker */}
-                            <input
-                                ref={colorInputRef}
-                                type="color"
-                                value={form.colorCode || "#ffffff"}
-                                onChange={handleColorPick}
-                                style={{
-                                    position: "relative",
-                                    opacity: 0,
-                                    pointerEvents: "none",
-                                    width: 0,
-                                    height: 0,
-                                    left: "335px",  // push it to the right of the modal
-                                    top: "50%",
-                                }}
-                            />
-                            <TextField
-                                fullWidth
-                                label="Color Code (hex)"
-                                value={form.colorCode}
-                                onChange={(e) => setForm(p => ({ ...p, colorCode: e.target.value }))}
-                                InputProps={{
-                                    startAdornment: form.colorCode && (
-                                        <InputAdornment position="start">
-                                            <Box sx={{
-                                                width: 20,
-                                                height: 20,
-                                                borderRadius: "4px",
-                                                backgroundColor: form.colorCode,
-                                                border: "1px solid rgba(0,0,0,0.2)",
-                                            }} />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton onClick={() => colorInputRef.current.click()} edge="end">
-                                                <FormatColorFillIcon sx={{ color: form.colorCode || "inherit" }} />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
-                </Box>
-                <Divider />
-                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, p: 2 }}>
-                    <Button variant="outlined" startIcon={<CancelIcon />} onClick={onCancel}>Cancel</Button>
-                    <Button variant="contained" startIcon={<CheckIcon />} onClick={() => onConfirm(form)}>Confirm</Button>
-                </Box>
-            </Paper>
-        </Modal>
-    );
-};
 
 // ─── Nested "Create VAT" modal ─────────────────────────────────────────────────
 const VatForm = ({ open, onConfirm, onCancel }) => {
@@ -126,9 +44,7 @@ const ProductParametersForm = ({
     initialData = {},
     onChange,
     storeOptions = [],
-    colorOptions = [],
     vatOptions = [],
-    onCreateColor,
     onCreateVat,
 }) => {
     const defaults = {
@@ -138,28 +54,20 @@ const ProductParametersForm = ({
         imageUrl: "",
         defaultSku: false,
         store: null,
-        color: null,
+        colorName: "",
+        colorCode: null,
         vat: null,
         price: null,
         flagActive: true,
     };
 
     const [form, setForm] = React.useState(() => ({ ...defaults, ...initialData }));
-    const [colorModalOpen, setColorModalOpen] = useState(false);
     const [vatModalOpen, setVatModalOpen] = useState(false);
-    const [pendingColorName, setPendingColorName] = useState("");
 
     const handleChange = (field, value) => {
         const updated = { ...form, [field]: value };
         setForm(updated);
         onChange?.(updated);
-    };
-
-    const handleColorConfirm = (newColor) => {
-        onCreateColor?.(newColor, (created) => {
-            handleChange("color", created);
-        });
-        setColorModalOpen(false);
     };
 
     const handleVatConfirm = (newVat) => {
@@ -203,52 +111,23 @@ const ProductParametersForm = ({
                     />
                 </Grid>
 
-                {/* Color Autocomplete with "Create new" */}
-                <Grid item xs={12}>
-                    <Autocomplete
-                        options={colorOptions}
-                        getOptionLabel={(o) => {
-                            if (typeof o === "string") return o;
-                            if (o?.inputValue) return o.inputValue;
-                            return o?.colorName ?? "";
-                        }}
-                        value={form.color}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params);
-                            // Always pin "Create new" at the top
-                            filtered.unshift({ isNew: true, colorName: "Create new color", inputValue: "" });
-                            return filtered;
-                        }}
-                        onChange={(_, value) => {
-                            if (value?.isNew) {
-                                setPendingColorName(value.inputValue);
-                                setColorModalOpen(true);
-                            } else {
-                                handleChange("color", value);
-                            }
-                        }}
-                        renderOption={(props, option) => (
-                            <li {...props} key={option?.idColor ?? "create-color"}>
-                                {option?.isNew
-                                    ? <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "primary.main" }}>
-                                        <AddIcon fontSize="small" /> Create new color
-                                    </Box>
-                                    : <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                                        <Box sx={{
-                                            width: 20,
-                                            height: 20,
-                                            borderRadius: "4px",
-                                            backgroundColor: option?.colorCode || "transparent",
-                                            border: "1px solid rgba(0,0,0,0.2)",
-                                            flexShrink: 0,
-                                        }} />
-                                        {option?.colorName}
-                                    </Box>
-                                }
-                            </li>
-                        )}
-                        renderInput={(params) => <TextField {...params} label="Color" fullWidth />}
+                {/* Color: name + picker side by side */}
+                <Grid item xs={8}>
+                    <TextField
+                        fullWidth
+                        label="Color Name"
+                        value={form.colorName ?? ""}
+                        onChange={(e) => handleChange("colorName", e.target.value)}
                     />
+                </Grid>
+                <Grid item xs={4}>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5 }}>Color</Typography>
+                        <ColorPickerCell
+                            value={form.colorCode}
+                            onChange={(hex) => handleChange("colorCode", hex)}
+                        />
+                    </Box>
                 </Grid>
 
                 {/* VAT Autocomplete with "Create new" */}
@@ -309,13 +188,6 @@ const ProductParametersForm = ({
 
             </Grid>
 
-            {/* Nested modals */}
-            <ColorForm
-                open={colorModalOpen}
-                initialName={pendingColorName}
-                onConfirm={handleColorConfirm}
-                onCancel={() => setColorModalOpen(false)}
-            />
             <VatForm
                 open={vatModalOpen}
                 onConfirm={handleVatConfirm}

@@ -1,22 +1,12 @@
 import { useGetPriorities } from "../../api/priorities/getPriorities";
 import { useUpdatePriority, useInactivatePriority } from "../../api/priorities/createPriorities";
-import { useGetColors } from "../../api/colors/getColors";
-import { useCreateColor } from "../../api/colors/createColors";
-import ColorAutocompleteCell from "../../components/ColorAutocompleteCell";
-import { Box } from "@mui/material";
+import ColorPickerCell from "../../components/ColorPickerCell";
+import { Box, Typography } from "@mui/material";
 
 export const PrioritiesStore = () => {
     const { data: gridData, isPending } = useGetPriorities();
-    const { data: colors } = useGetColors();
     const { mutate: updatePriority } = useUpdatePriority();
     const { mutate: inactivatePriority } = useInactivatePriority();
-    const { mutate: createColor } = useCreateColor();
-
-    const handleCreateColor = (newColor, cb) => {
-        createColor(newColor, {
-            onSuccess: (response) => cb(response.data)
-        });
-    };
 
     return {
         pageTitle: "PRIORITIES",
@@ -40,33 +30,27 @@ export const PrioritiesStore = () => {
                 flex: 1
             },
             {
-                field: "color",
+                field: "colorCode",
                 headerName: "COLOR",
                 editable: true,
                 flex: 0.6,
-                valueGetter: (value, row) => row.color ?? null,
                 renderEditCell: (params) => (
-                    <ColorAutocompleteCell
+                    <ColorPickerCell
                         value={params.value}
-                        colorOptions={colors ?? []}
-                        onCreateColor={handleCreateColor}
-                        onChange={(newColor) => {
-                            params.api.setEditCellValue({ id: params.id, field: "color", value: newColor });
-                        }}
+                        onChange={(hex) => params.api.setEditCellValue({ id: params.id, field: "colorCode", value: hex })}
                     />
                 ),
                 renderCell: (params) => {
-                    const color = params.value;
-                    if (!color) return "—";
+                    if (!params.value) return "—";
                     return (
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                             <Box sx={{
                                 width: 16, height: 16, borderRadius: "3px",
-                                backgroundColor: color.colorCode || "transparent",
+                                backgroundColor: params.value,
                                 border: "1px solid rgba(0,0,0,0.2)",
                                 flexShrink: 0,
                             }} />
-                            {color.colorName}
+                            <Typography variant="caption" sx={{ fontFamily: "monospace" }}>{params.value}</Typography>
                         </Box>
                     );
                 },
@@ -75,7 +59,7 @@ export const PrioritiesStore = () => {
         sampleRow: {
             id_priority: null,
             name: "",
-            color: null,
+            colorCode: null,
             description: "",
             flagActive: true
         }

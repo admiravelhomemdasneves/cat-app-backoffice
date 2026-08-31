@@ -113,13 +113,15 @@ export const OrderDetailStore = () => {
                     idProductParameter: param.idProductParameter,
                     name: `${param.brand || ""} - ${param.name || ""}`,
                     imageUrl: param.defaultSku ? param.imageUrl : null,
-                    color: param.defaultSku ? param.color : null,
+                    colorName: param.defaultSku ? param.colorName : null,
+                    colorCode: param.defaultSku ? param.colorCode : null,
                     size: param.defaultSku ? param.size : null,
                 };
             } else if (param.defaultSku) {
                 acc[param.idProduct].idProductParameter = param.idProductParameter;
                 acc[param.idProduct].imageUrl = param.imageUrl;
-                acc[param.idProduct].color = param.color;
+                acc[param.idProduct].colorName = param.colorName;
+                acc[param.idProduct].colorCode = param.colorCode;
                 acc[param.idProduct].size = param.size;
             }
             return acc;
@@ -131,14 +133,12 @@ export const OrderDetailStore = () => {
             (products ?? [])
                 .filter(p => p.idProduct === idProduct)
                 .reduce((acc, param) => {
-                    const key = param.color?.idColor ?? "null";
+                    const key = param.colorCode ?? "null";
                     if (!acc[key]) {
                         acc[key] = {
-                            idColor: param.color?.idColor ?? null,
-                            colorName: param.color?.colorName ?? "N/A",
-                            colorCode: param.color?.colorCode ?? null,
+                            colorName: param.colorName ?? "N/A",
+                            colorCode: param.colorCode ?? null,
                             imageUrl: param.imageUrl,
-                            size: param.size,
                         };
                     }
                     return acc;
@@ -146,13 +146,13 @@ export const OrderDetailStore = () => {
         );
     };
 
-    const distinctSizeOptionsFormatter = (idProduct, idColor) => {
+    const distinctSizeOptionsFormatter = (idProduct, colorCode) => {
         return Object.values(
             (products ?? [])
                 .filter(p => {
-                    const colorMatch = idColor === null
-                        ? p.color == null
-                        : p.color?.idColor === idColor;
+                    const colorMatch = colorCode == null
+                        ? p.colorCode == null
+                        : p.colorCode === colorCode;
                     return p.idProduct === idProduct && colorMatch;
                 })
                 .reduce((acc, param) => {
@@ -203,7 +203,7 @@ export const OrderDetailStore = () => {
                     if (!product) return "—";
                     const parts = [
                         product.name,
-                        product.color?.colorName,
+                        product.colorName,
                         product.size
                     ].filter(Boolean).join(" - ");
                     return parts;

@@ -103,8 +103,8 @@ const AutocompleteProductSelector = ({
     const initialProduct = value
         ? distinctProducts.find(p => p.idProduct === value.idProduct) ?? null
         : null;
-    const initialColor = value?.color
-        ? { idColor: value.color.idColor, colorName: value.color.colorName, colorCode: value.color.colorCode, imageUrl: value.imageUrl }
+    const initialColor = value?.colorCode
+        ? { colorName: value.colorName ?? "N/A", colorCode: value.colorCode, imageUrl: value.imageUrl }
         : null;
     const initialSize = value?.size
         ? { id: value.idProductParameter, name: value.size, imageUrl: value.imageUrl }
@@ -159,14 +159,14 @@ const AutocompleteProductSelector = ({
 
     // Step 3 — size options derived from selected product + color
     const sizeOptions = selectedProduct && selectedColor
-    ? distinctSizeOptionsFormatter(selectedProduct.idProduct, selectedColor.idColor)
+    ? distinctSizeOptionsFormatter(selectedProduct.idProduct, selectedColor.colorCode)
     : [];
 
     const currentOptions = step <= 1 ? productOptions : step === 2 ? colorOptions : sizeOptions;
 
     const getOptionKey = (option) => {
         if (step <= 1) return option.idProduct;
-        if (step === 2) return option.idColor ?? "null";
+        if (step === 2) return option.colorCode ?? "null";
         return option.id;
     };
 
@@ -195,7 +195,7 @@ const AutocompleteProductSelector = ({
             setSelectedSize(newValue);
             const resolved = products.find(p =>
                 p.idProduct === selectedProduct.idProduct &&
-                (selectedColor.idColor === null ? p.color == null : p.color?.idColor === selectedColor.idColor) &&
+                (selectedColor.colorCode == null ? p.colorCode == null : p.colorCode === selectedColor.colorCode) &&
                 (newValue.name === "N/A" ? !p.size : p.size === newValue.name)
             );
             onChange?.(resolved ?? null);
@@ -264,7 +264,7 @@ const AutocompleteProductSelector = ({
                 const displayValue = committedValue
                     ? [
                         committedValue.name,
-                        committedValue.color?.colorName,
+                        committedValue.colorName,
                         committedValue.size
                     ].filter(Boolean).join(" - ")
                     : [

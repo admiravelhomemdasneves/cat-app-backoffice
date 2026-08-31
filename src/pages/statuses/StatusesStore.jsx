@@ -1,24 +1,13 @@
-
 import { useGetOrderStatus } from "../../api/orderStatus/getOrderStatus";
 import { useUpdateStatus, useInactivateStatus } from "../../api/orderStatus/createOrderStatus";
-import { useGetColors } from "../../api/colors/getColors";
-import { useCreateColor } from "../../api/colors/createColors";
-import ColorAutocompleteCell from "../../components/ColorAutocompleteCell";
-import { Box } from "@mui/material";
+import ColorPickerCell from "../../components/ColorPickerCell";
+import { Box, Typography } from "@mui/material";
 
 export const StatusesStore = () => {
     const { data: gridData, isPending } = useGetOrderStatus();
-    const { data: colors } = useGetColors();
     const { mutate: updateStatus } = useUpdateStatus();
     const { mutate: inactivateStatus } = useInactivateStatus();
-    const { mutate: createColor } = useCreateColor();
 
-    const handleCreateColor = (newColor, cb) => {
-        createColor(newColor, {
-            onSuccess: (response) => cb(response.data)
-        });
-    };
-    
     return {
         pageTitle: "STATUSES",
         pageSubtitle: "Welcome to your statuses page",
@@ -41,33 +30,27 @@ export const StatusesStore = () => {
                 flex: 1
             },
             {
-                field: "color",
+                field: "colorCode",
                 headerName: "COLOR",
                 editable: true,
                 flex: 0.6,
-                valueGetter: (value, row) => row.color ?? null,
                 renderEditCell: (params) => (
-                    <ColorAutocompleteCell
+                    <ColorPickerCell
                         value={params.value}
-                        colorOptions={colors ?? []}
-                        onCreateColor={handleCreateColor}
-                        onChange={(newColor) => {
-                            params.api.setEditCellValue({ id: params.id, field: "color", value: newColor });
-                        }}
+                        onChange={(hex) => params.api.setEditCellValue({ id: params.id, field: "colorCode", value: hex })}
                     />
                 ),
                 renderCell: (params) => {
-                    const color = params.value;
-                    if (!color) return "—";
+                    if (!params.value) return "—";
                     return (
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                             <Box sx={{
                                 width: 16, height: 16, borderRadius: "3px",
-                                backgroundColor: color.colorCode || "transparent",
+                                backgroundColor: params.value,
                                 border: "1px solid rgba(0,0,0,0.2)",
                                 flexShrink: 0,
                             }} />
-                            {color.colorName}
+                            <Typography variant="caption" sx={{ fontFamily: "monospace" }}>{params.value}</Typography>
                         </Box>
                     );
                 },
@@ -83,7 +66,7 @@ export const StatusesStore = () => {
             "id_status": null,
             "name": "",
             "description": "",
-            "color": null,
+            "colorCode": null,
             "terminalStatus": false,
             "flagActive": true
         }

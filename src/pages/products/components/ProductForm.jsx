@@ -8,8 +8,8 @@ const ProductForm = ({ initialData = {}, onChange }) => {
     const {
         rowIdField,
         columnsDefinition, sampleRow,
-        storeOptions, colorOptions, vatOptions,
-        createColor, createVat,
+        storeOptions, vatOptions,
+        createVat,
     } = ProductParametersStore();
 
     const [form, setForm] = React.useState(() => {
@@ -96,9 +96,7 @@ const ProductForm = ({ initialData = {}, onChange }) => {
                                 initialData={paramInitialData}
                                 onChange={paramOnChange}
                                 storeOptions={storeOptions}
-                                colorOptions={colorOptions}
                                 vatOptions={vatOptions}
-                                onCreateColor={(newColor, cb) => createColor(newColor, { onSuccess: cb })}
                                 onCreateVat={(newVat, cb) => createVat(newVat, { onSuccess: cb })}
                             />
                         )}
@@ -107,9 +105,7 @@ const ProductForm = ({ initialData = {}, onChange }) => {
                                 initialData={paramInitialData}
                                 onChange={paramOnChange}
                                 storeOptions={storeOptions}
-                                colorOptions={colorOptions}
                                 vatOptions={vatOptions}
-                                onCreateColor={(newColor, cb) => createColor(newColor, { onSuccess: cb })}
                                 onCreateVat={(newVat, cb) => createVat(newVat, { onSuccess: cb })}
                             />
                         )}

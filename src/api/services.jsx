@@ -40,10 +40,6 @@ const Services = {
   BO_SAVE_VAT: "/bo/vat/save",
   BO_INACTIVATE_VAT: "/bo/vat/inactivate",
 
-  BO_GET_ALL_COLORS: "/bo/color",
-  BO_SAVE_COLOR: "/bo/color/save",
-  BO_INACTIVATE_COLOR: "/bo/color/inactivate",
-
   BO_GET_ALL_STORES: "/bo/store",
   BO_SAVE_STORE: "/bo/store/save",
   BO_INACTIVATE_STORE: "/bo/store/inactivate",
