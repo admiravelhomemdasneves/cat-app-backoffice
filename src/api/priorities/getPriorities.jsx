@@ -10,5 +10,5 @@ export const useGetPriorities = () => {
         return response;
     }})
 
-    if (!isPending && !error && data) return data;
+    return { data, isPending, error };
 };

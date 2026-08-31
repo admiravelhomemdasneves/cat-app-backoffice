@@ -15,7 +15,7 @@ class ApiClient {
     // Request interceptor
     this.client.interceptors.request.use(
       (config) => {
-        if (config.url.startsWith(`${this.baseURL}/auth`)) {
+        if (config.url.startsWith('/auth')) {
           return config; // Directly return the config without adding the Authorization header
         }
 
@@ -44,32 +44,34 @@ class ApiClient {
 
   // Helper method to redirect to the login page
   redirectToLogin() {
-    localStorage.removeItem('token'); // Clear invalid token
-    window.location.href = '/login'; // Redirect to login
+    if (window.location.pathname !== '/login') {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
   }
 
   // Basic CRUD operations
   async get(path, params = {}) {
     try {
-      const response = await this.client.get(BASE_URL + path, { params });
+      const response = await this.client.get(path, { params });
       return response.data;
     } catch (error) {
       console.error("Error fetching data: ", error);
       throw error;
     }
-    
+
   }
 
   post(path, data = {}) {
-    return this.client.post(BASE_URL + path, data);
+    return this.client.post(path, data);
   }
 
   put(path, data = {}) {
-    return this.client.put(BASE_URL + path, data);
+    return this.client.put(path, data);
   }
 
   delete(path) {
-    return this.client.delete(BASE_URL + path);
+    return this.client.delete(path);
   }
 
   setAuthToken(token) {

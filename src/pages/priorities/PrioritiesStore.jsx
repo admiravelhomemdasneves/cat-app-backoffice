@@ -6,8 +6,8 @@ import ColorAutocompleteCell from "../../components/ColorAutocompleteCell";
 import { Box } from "@mui/material";
 
 export const PrioritiesStore = () => {
-    const gridData = useGetPriorities();
-    const colors = useGetColors();
+    const { data: gridData, isPending } = useGetPriorities();
+    const { data: colors } = useGetColors();
     const { mutate: updatePriority } = useUpdatePriority();
     const { mutate: inactivatePriority } = useInactivatePriority();
     const { mutate: createColor } = useCreateColor();
@@ -23,6 +23,7 @@ export const PrioritiesStore = () => {
         pageSubtitle: "Welcome to your priorities page",
         rowIdField: 'id_priority',
         gridData: gridData || [],
+        isPending,
         updateHook: updatePriority,
         deleteHook: inactivatePriority,
         columnsDefinition: [

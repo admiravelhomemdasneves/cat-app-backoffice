@@ -90,6 +90,7 @@ const ProductForm = ({ initialData = {}, onChange }) => {
                         updateHook={handleParameterUpdate}  // ← local state only, no API call
                         deleteHook={handleParameterDelete}  // ← local state only, no API call
                         allowRowEditOnGrid={false}
+                        autoHeight
                         addRecordComponent={({ initialData: paramInitialData, onChange: paramOnChange }) => (
                             <ProductParametersForm
                                 initialData={paramInitialData}

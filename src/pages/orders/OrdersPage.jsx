@@ -4,10 +4,12 @@ import { Box, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import DataTable from "../../components/DataTable";
 import OrderDetailsView from "./components/OrderDetailsView";
+import { usePagePermission } from "../../hooks/usePagePermission";
 
 const OrdersPage = () => {
-  const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions} = OrdersStore();
+  const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, isPending, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions} = OrdersStore();
   const {detailRowIdField, detailUpdateHook, detailDeleteHook, detailColumnsDefinition, detailSampleRow} = OrderDetailStore();
+  const { canCreate, canEdit, canDelete } = usePagePermission('/orders');
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const selectedOrder = gridData.find(o => o[rowIdField] === selectedOrderId) ?? null;
 
@@ -29,7 +31,11 @@ const OrdersPage = () => {
               rowIdField={rowIdField}
               updateHook={updateHook}
               deleteHook={deleteHook}
+              loading={isPending}
               onRowSelection={(row) => setSelectedOrderId(row?.[rowIdField] ?? null)}
+              allowAdd={canCreate}
+              allowEdit={canEdit}
+              allowDelete={canDelete}
             />
           </Box>
         </Grid>

@@ -4,17 +4,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DataTable from "../../../components/DataTable";
 import { tokens } from "../../../theme";
 
-const OrderDetailsView = ({ 
-    order, 
-    columnsDefinition, 
-    sampleRow, 
+const OrderDetailsView = ({
+    order,
+    columnsDefinition,
+    sampleRow,
     rowIdField,
     orderUpdateHook,
-    productUpdateHook, 
-    productDeleteHook, 
-    contactOptions, 
-    statusOptions, 
-    prioritiesOptions 
+    productUpdateHook,
+    productDeleteHook,
+    contactOptions,
+    statusOptions,
+    prioritiesOptions,
+    borderLeft = 1,
 }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -34,7 +35,7 @@ const OrderDetailsView = ({
     
     return (
         <Box p={2}
-            borderLeft={1} 
+            borderLeft={borderLeft}
             borderColor="divider"
         >
             <Accordion defaultExpanded sx={{backgroundColor: "rgba(255, 255, 255, 0.8)", backdropFilter: "blur(4px)"}}>

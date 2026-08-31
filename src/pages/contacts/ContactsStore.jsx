@@ -2,6 +2,7 @@ import React from "react";
 import { useGetContacts } from "../../api/contacts/getContacts";
 import { useUpdateContact } from "../../api/contacts/createContacts";
 import { useInactivateContact } from "../../api/contacts/createContacts";
+import { createIdLinkColumn } from "../../utils/columnHelpers";
 import { useGridApiContext } from "@mui/x-data-grid";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Box, TextField, Button, Typography } from "@mui/material";
 
@@ -82,7 +83,7 @@ function AddressEditCell({ id, field, row, hasFocus }) {
 }
 
 export const ContactsStore = () => {
-    const gridData = useGetContacts();
+    const { data: gridData, isPending } = useGetContacts();
     const { mutate: updateContact } = useUpdateContact();
     const { mutate: inactivateOrder } = useInactivateContact();
     
@@ -91,9 +92,11 @@ export const ContactsStore = () => {
         pageSubtitle: "Welcome to your contacts page",
         rowIdField : 'idContact',
         gridData : gridData || [],
+        isPending,
         updateHook : updateContact,
         deleteHook : inactivateOrder,
         columnsDefinition: [
+            createIdLinkColumn({ field: 'idContact', pathPrefix: 'contacts', headerName: 'ID', getState: (row) => ({ contact: row }) }),
             {
                 field: "firstName",
                 headerName: "FIRST NAME",

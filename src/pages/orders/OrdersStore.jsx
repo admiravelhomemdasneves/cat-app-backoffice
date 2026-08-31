@@ -1,4 +1,5 @@
 import { useGetOrders } from "../../api/orders/getOrders";
+import { createIdLinkColumn } from "../../utils/columnHelpers";
 import { useGetOrderStatus } from '../../api/orderStatus/getOrderStatus';
 import { useGetContacts } from '../../api/contacts/getContacts';
 import { useGetPriorities } from '../../api/priorities/getPriorities';
@@ -9,10 +10,10 @@ import { useUpdateOrderItemDTO, useInactivateOrderItem } from '../../api/orderPr
 import AutocompleteProductSelector from "./components/AutocompleteProductSelector";
 
 export const OrdersStore = () => {
-    const gridData = useGetOrders();
-    const orderStatus = useGetOrderStatus();
-    const contacts = useGetContacts();
-    const priorities = useGetPriorities();
+    const { data: gridData, isPending } = useGetOrders();
+    const { data: orderStatus } = useGetOrderStatus();
+    const { data: contacts } = useGetContacts();
+    const { data: priorities } = useGetPriorities();
     const { mutate: updateOrder } = useUpdateOrderDTO();
     const { mutate: inactivateOrder } = useInactivateOrder();
     const contactsOptions = contacts && contacts.map(entry => ({ id: entry.idContact, label: `${entry.firstName || " "} ${entry.lastName || " "}`, value: entry }));
@@ -24,9 +25,11 @@ export const OrdersStore = () => {
         pageSubtitle: "Welcome to your orders page", 
         rowIdField : 'idOrder',
         gridData : gridData || [],
+        isPending,
         updateHook : updateOrder,
         deleteHook : inactivateOrder,
         columnsDefinition: [
+            createIdLinkColumn({ field: 'idOrder', pathPrefix: 'orders', headerName: 'ORDER', getState: (row) => ({ order: row }) }),
             {
                 field: "contact",
                 headerName: "CLIENT",
@@ -97,8 +100,8 @@ export const OrdersStore = () => {
 };
 
 export const OrderDetailStore = () => {
-    const products = useGetProductParameters();
-    const printingServices = useGetPrintingServices();
+    const { data: products } = useGetProductParameters();
+    const { data: printingServices } = useGetPrintingServices();
     const { mutate: updateOrderProduct } = useUpdateOrderItemDTO();
     const { mutate: inactivateOrderProduct } = useInactivateOrderItem(); 
 

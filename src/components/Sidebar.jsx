@@ -12,6 +12,12 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import PrintIcon from '@mui/icons-material/Print';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import { useGetCurrentUser } from "../api/users/getCurrentUser";
+import { useGetMyPermissions } from "../api/permissions/getMyPermissions";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -34,6 +40,14 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const { data: currentUser } = useGetCurrentUser();
+  const { data: permissions } = useGetMyPermissions();
+
+  const canViewPage = (path) => {
+    if (!permissions) return true;
+    const rule = permissions.find(p => p.backofficePage.path === path);
+    return !rule || (rule.canView ?? true);
+  };
 
   return (
     <Box
@@ -109,10 +123,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  A Catarina Almeida
+                  {currentUser?.username || "—"}
                 </Typography>
                 <Typography variant="h5" color={colors.secondary[500]}>
-                  CEO Admin
+                  {currentUser?.accessLevelName || ""}
                 </Typography>
               </Box>
             </Box>
@@ -138,29 +152,45 @@ const Sidebar = () => {
                 </Typography>
             )}
 
-            <Item
-                title="Orders"
-                to="/orders"
-                icon={<ReceiptOutlinedIcon/>}
-                selected={selected}
-                setSelected={setSelected}
-            />
+            {canViewPage('/orders') && (
+                <Item
+                    title="Orders"
+                    to="/orders"
+                    icon={<ReceiptOutlinedIcon/>}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
 
-            <Item
-                title="Contacts"
-                to="/contacts"
-                icon={<ContactsOutlinedIcon/>}
-                selected={selected}
-                setSelected={setSelected}
-            />
+            {canViewPage('/contacts') && (
+                <Item
+                    title="Contacts"
+                    to="/contacts"
+                    icon={<ContactsOutlinedIcon/>}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
 
-            <Item
-                title="Products"
-                to="/products"
-                icon={<CategoryIcon/>}
-                selected={selected}
-                setSelected={setSelected}
-            />
+            {canViewPage('/products') && (
+                <Item
+                    title="Products"
+                    to="/products"
+                    icon={<CategoryIcon/>}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
+
+            {canViewPage('/colaborators') && (
+                <Item
+                    title="Colaborators"
+                    to="/colaborators"
+                    icon={<PeopleAltOutlinedIcon/>}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
 
             {!isCollapsed && (
                 <Typography
@@ -172,26 +202,68 @@ const Sidebar = () => {
                 </Typography>
             )}
 
+            {canViewPage('/roles') && (
+                <Item
+                    title="Roles"
+                    to="/roles"
+                    icon={<AdminPanelSettingsOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
+
+            {canViewPage('/orderStatus') && (
+                <Item
+                    title="Statuses"
+                    to="/orderStatus"
+                    icon={<ViewListIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
+
+            {canViewPage('/orderPriority') && (
+                <Item
+                    title="Priorities"
+                    to="/orderPriority"
+                    icon={<KeyboardDoubleArrowUpIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
+
+            {canViewPage('/printingService') && (
+                <Item
+                    title="Printing Services"
+                    to="/printingService"
+                    icon={<PrintIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
+
+            {!isCollapsed && (
+                <Typography
+                    variant="h6"
+                    color={colors.grey[300]}
+                    sx={{ m: "15px 0 5px 20px" }}
+                >
+                    Account
+                </Typography>
+            )}
+
             <Item
-                title="Statuses"
-                to="/orderStatus"
-                icon={<ViewListIcon />}
+                title="User Settings"
+                to="/settings"
+                icon={<ManageAccountsOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
             />
 
             <Item
-                title="Priorities"
-                to="/orderPriority"
-                icon={<KeyboardDoubleArrowUpIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            />
-
-            <Item
-                title="Printing Services"
-                to="/printingService"
-                icon={<PrintIcon />}
+                title="Company Settings"
+                to="/company-settings"
+                icon={<BusinessOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
             />

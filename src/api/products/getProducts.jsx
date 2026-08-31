@@ -10,7 +10,7 @@ export const useGetProducts = () => {
         return response;
     }})
 
-    if (!isPending && !error && data) return data;
+    return { data, isPending, error };
 };
 
 export const useGetProductParameters = () => {
@@ -21,5 +21,5 @@ export const useGetProductParameters = () => {
         return response;
     }})
 
-    if (!isPending && !error && data) return data;
+    return { data, isPending, error };
 };

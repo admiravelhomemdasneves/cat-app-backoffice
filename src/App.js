@@ -12,9 +12,25 @@ import PrioritiesPage from './pages/priorities/PrioritiesPage';
 import PrintingServicesPage from './pages/printingServices/PrintingServicesPage';
 import LoginPage from './pages/LoginPage';
 import OrdersPage from './pages/orders/OrdersPage';
+import UserSettingsPage from './pages/userSettings/UserSettingsPage';
+import OrderDetailPage from './pages/orders/OrderDetailPage';
+import ContactDetailPage from './pages/contacts/ContactDetailPage';
+import ProductDetailPage from './pages/products/ProductDetailPage';
+import CompanySettingsPage from './pages/companySettings/CompanySettingsPage';
+import ColaboratorsPage from './pages/colaborators/ColaboratorsPage';
+import RolesPage from './pages/roles/RolesPage';
+import PrivateRoute from './routes/PrivateRoute';
+import PermissionRoute from './routes/PermissionRoute';
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 function App() {
-  const queryClient = new QueryClient();
   const [theme, colorMode] = useMode();
 
   return (
@@ -24,23 +40,32 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/*" element={
-              <div className="app">
-                <Sidebar />
-                <main className="content">
-                  <Topbar />
-                  <Routes>
-                    <Route path="/" element={<DashboardPage />} />
-                    <Route path="/orders" element={<OrdersPage />} />
-                    <Route path="/contacts" element={<ContactsPage />} />
-                    <Route path="/products" element={<ProductsPage />} />
-                    <Route path="/orderStatus" element={<StatusesPage />} />
-                    <Route path="/orderPriority" element={<PrioritiesPage />} />
-                    <Route path="/printingService" element={<PrintingServicesPage />} />
-                  </Routes>
-                </main>
-              </div>
-            } />
+            <Route element={<PrivateRoute />}>
+              <Route path="/*" element={
+                <div className="app">
+                  <Sidebar />
+                  <main className="content">
+                    <Topbar />
+                    <Routes>
+                      <Route path="/" element={<DashboardPage />} />
+                      <Route path="/orders" element={<PermissionRoute path="/orders" element={<OrdersPage />} />} />
+                      <Route path="/orders/:id" element={<PermissionRoute path="/orders" element={<OrderDetailPage />} />} />
+                      <Route path="/contacts" element={<PermissionRoute path="/contacts" element={<ContactsPage />} />} />
+                      <Route path="/contacts/:id" element={<PermissionRoute path="/contacts" element={<ContactDetailPage />} />} />
+                      <Route path="/products" element={<PermissionRoute path="/products" element={<ProductsPage />} />} />
+                      <Route path="/products/:id" element={<PermissionRoute path="/products" element={<ProductDetailPage />} />} />
+                      <Route path="/orderStatus" element={<PermissionRoute path="/orderStatus" element={<StatusesPage />} />} />
+                      <Route path="/orderPriority" element={<PermissionRoute path="/orderPriority" element={<PrioritiesPage />} />} />
+                      <Route path="/printingService" element={<PermissionRoute path="/printingService" element={<PrintingServicesPage />} />} />
+                      <Route path="/colaborators" element={<PermissionRoute path="/colaborators" element={<ColaboratorsPage />} />} />
+                      <Route path="/roles" element={<PermissionRoute path="/roles" element={<RolesPage />} />} />
+                      <Route path="/settings" element={<UserSettingsPage />} />
+                      <Route path="/company-settings" element={<CompanySettingsPage />} />
+                    </Routes>
+                  </main>
+                </div>
+              } />
+            </Route>
           </Routes>
         </ThemeProvider>
       </ColorModeContext.Provider>

@@ -1,19 +1,22 @@
 import { useGetProducts } from "../../api/products/getProducts";
 import { useUpdateProduct, useInactivateProduct } from "../../api/products/createProducts";
+import { createIdLinkColumn } from "../../utils/columnHelpers";
 
 export const ProductsStore = () => {
-    const gridData = useGetProducts();
+    const { data: gridData, isPending } = useGetProducts();
     const { mutate: updateProduct } = useUpdateProduct();
     const { mutate: inactivateProduct } = useInactivateProduct();
-    
+
     return {
         pageTitle: "PRODUCTS",
         pageSubtitle: "Welcome to your products page",
         rowIdField: 'idProduct',
         gridData: gridData || [],
+        isPending,
         updateHook: updateProduct,
         deleteHook: inactivateProduct,
         columnsDefinition: [
+            createIdLinkColumn({ field: 'idProduct', pathPrefix: 'products', headerName: 'ID', getState: (row) => ({ product: row }) }),
             {
                 field: "catalogReference",
                 headerName: "REFERENCE",

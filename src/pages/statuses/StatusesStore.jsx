@@ -7,8 +7,8 @@ import ColorAutocompleteCell from "../../components/ColorAutocompleteCell";
 import { Box } from "@mui/material";
 
 export const StatusesStore = () => {
-    const gridData = useGetOrderStatus();
-    const colors = useGetColors();
+    const { data: gridData, isPending } = useGetOrderStatus();
+    const { data: colors } = useGetColors();
     const { mutate: updateStatus } = useUpdateStatus();
     const { mutate: inactivateStatus } = useInactivateStatus();
     const { mutate: createColor } = useCreateColor();
@@ -24,6 +24,7 @@ export const StatusesStore = () => {
         pageSubtitle: "Welcome to your statuses page",
         rowIdField : 'id_status',
         gridData : gridData || [],
+        isPending,
         updateHook : updateStatus,
         deleteHook : inactivateStatus,
         columnsDefinition: [

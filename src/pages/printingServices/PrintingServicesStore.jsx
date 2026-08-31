@@ -2,15 +2,16 @@ import { useGetPrintingServices } from "../../api/printingServices/getPrintingSe
 import { useUpdatePrintingService, useInactivatePrintingService } from "../../api/printingServices/createPrintingServices";
 
 export const PrintingServicesStore = () => {
-    const gridData = useGetPrintingServices();
+    const { data: gridData, isPending } = useGetPrintingServices();
     const { mutate: updatePrintingServices } = useUpdatePrintingService();
     const { mutate: inactivatePrintingServices } = useInactivatePrintingService();
-    
+
     return {
         pageTitle: "PRINTING SERVICES",
         pageSubtitle: "Welcome to your printing services page",
         rowIdField : 'id_printing_service',
         gridData : gridData || [],
+        isPending,
         updateHook : updatePrintingServices,
         deleteHook : inactivatePrintingServices,
         columnsDefinition: [

@@ -11,5 +11,5 @@ export const useGetColors = () => {
         }
     });
 
-    if (!isPending && !error && data) return data;
+    return { data, isPending, error };
 };

@@ -1,6 +1,27 @@
 const Services = {
   POST_LOGIN: `/auth/login`,
 
+  GET_CURRENT_USER: `/users/me`,
+  PUT_CURRENT_USER: `/users/me`,
+
+  BO_GET_MY_COMPANY: `/bo/companies/mine`,
+  BO_SAVE_COMPANY: `/bo/companies/save`,
+
+  BO_GET_USERS: `/bo/users`,
+  BO_SAVE_USER: `/bo/users/save`,
+  BO_UPDATE_USER_ACCESS_LEVEL: `/bo/users`,
+  BO_INACTIVATE_USER: `/bo/users/inactivate`,
+
+  BO_GET_ACCESS_LEVELS: `/bo/accessLevels`,
+
+  BO_GET_PAGES: `/bo/pages`,
+  BO_SAVE_PAGE: `/bo/pages/save`,
+
+  BO_GET_MY_PERMISSIONS: `/bo/permissions/mine`,
+  BO_GET_ALL_PERMISSIONS: `/bo/permissions`,
+  BO_SAVE_PERMISSION: `/bo/permissions/save`,
+  BO_DELETE_PERMISSION: `/bo/permissions`,
+
   BO_GET_ALL_ORDERS : "/bo/orders",
   BO_SAVE_ORDER : "/bo/orders/save",
 
