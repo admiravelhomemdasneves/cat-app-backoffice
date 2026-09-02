@@ -228,6 +228,29 @@ export const OrderDetailStore = () => {
                 flex: 0.4
             },
             {
+                field: "serviceHours",
+                headerName: "SVC HOURS",
+                editable: true,
+                type: "number",
+                flex: 0.4,
+            },
+            {
+                field: "serviceRate",
+                headerName: "SVC RATE",
+                editable: true,
+                type: "number",
+                flex: 0.4,
+                valueFormatter: (value) => value != null ? value.toFixed(2) : "—",
+            },
+            {
+                field: "unitPrice",
+                headerName: "UNIT PRICE",
+                editable: true,
+                type: "number",
+                flex: 0.4,
+                valueFormatter: (value) => value != null ? value.toFixed(2) : "—",
+            },
+            {
                 field: "description",
                 headerName: "NOTES",
                 editable: true,
@@ -240,6 +263,9 @@ export const OrderDetailStore = () => {
             product: null,
             printingService: null,
             quantity: 0,
+            serviceHours: null,
+            serviceRate: null,
+            unitPrice: null,
             flagActive: true
         }
     };

@@ -27,11 +27,33 @@ export const PrintingServicesStore = () => {
                 editable: true,
                 flex: 1
             },
+            {
+                field: "rate",
+                headerName: "RATE",
+                editable: true,
+                type: "number",
+                flex: 0.4,
+                valueFormatter: (value) => value != null ? value.toFixed(2) : "—",
+            },
+            {
+                field: "rateType",
+                headerName: "RATE TYPE",
+                editable: true,
+                type: "singleSelect",
+                flex: 0.5,
+                valueOptions: [
+                    { value: "HOURLY", label: "Per Hour" },
+                    { value: "PER_UNIT", label: "Per Unit" },
+                ],
+                valueFormatter: (value) => value === "HOURLY" ? "Per Hour" : value === "PER_UNIT" ? "Per Unit" : "—",
+            },
         ],
         sampleRow: {
             "id_printing_service": null,
             "name": "",
             "description": "",
+            "rate": null,
+            "rateType": null,
             "flagActive": true
         }
     };

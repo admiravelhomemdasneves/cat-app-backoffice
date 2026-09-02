@@ -16,6 +16,7 @@ import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlin
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined';
 import { useGetCurrentUser } from "../api/users/getCurrentUser";
 import { useGetMyPermissions } from "../api/permissions/getMyPermissions";
 
@@ -182,11 +183,11 @@ const Sidebar = () => {
                 />
             )}
 
-            {canViewPage('/colaborators') && (
+            {canViewPage('/material') && (
                 <Item
-                    title="Colaborators"
-                    to="/colaborators"
-                    icon={<PeopleAltOutlinedIcon/>}
+                    title="Materials"
+                    to="/material"
+                    icon={<HandymanOutlinedIcon/>}
                     selected={selected}
                     setSelected={setSelected}
                 />
@@ -267,6 +268,16 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
+
+            {canViewPage('/colaborators') && (
+                <Item
+                    title="Colaborators"
+                    to="/colaborators"
+                    icon={<PeopleAltOutlinedIcon/>}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
           </Box>
         </Menu>
       </ProSidebar>

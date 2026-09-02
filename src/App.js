@@ -19,6 +19,8 @@ import ProductDetailPage from './pages/products/ProductDetailPage';
 import CompanySettingsPage from './pages/companySettings/CompanySettingsPage';
 import ColaboratorsPage from './pages/colaborators/ColaboratorsPage';
 import RolesPage from './pages/roles/RolesPage';
+import MaterialsPage from './pages/materials/MaterialsPage';
+import MaterialDetailPage from './pages/materials/MaterialDetailPage';
 import PrivateRoute from './routes/PrivateRoute';
 import PermissionRoute from './routes/PermissionRoute';
 
@@ -59,6 +61,8 @@ function App() {
                       <Route path="/printingService" element={<PermissionRoute path="/printingService" element={<PrintingServicesPage />} />} />
                       <Route path="/colaborators" element={<PermissionRoute path="/colaborators" element={<ColaboratorsPage />} />} />
                       <Route path="/roles" element={<PermissionRoute path="/roles" element={<RolesPage />} />} />
+                      <Route path="/material" element={<PermissionRoute path="/material" element={<MaterialsPage />} />} />
+                      <Route path="/material/:id" element={<PermissionRoute path="/material" element={<MaterialDetailPage />} />} />
                       <Route path="/settings" element={<UserSettingsPage />} />
                       <Route path="/company-settings" element={<CompanySettingsPage />} />
                     </Routes>

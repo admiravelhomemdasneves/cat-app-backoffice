@@ -16,7 +16,7 @@ const StatusesPage = () => {
             subtitle={pageSubtitle}
         />
         <Box sx={{ flex: 1, height: '700px' }}>
-            <DataTable
+            <DataTable 
                 gridData={gridData}
                 columnsDefinition={columnsDefinition}
                 sampleRow={sampleRow}

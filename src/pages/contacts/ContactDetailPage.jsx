@@ -19,7 +19,10 @@ const ContactDetailPage = () => {
 
     return (
         <Box p={2}>
-            <Header title={`Contact #${id}`} subtitle="View and manage contact details" />
+            <Header
+                title={`Contact #${id}${contact ? ` - ${[contact.firstName, contact.lastName].filter(Boolean).join(' ')}` : ''}`}
+                subtitle="View and manage contact details"
+            />
             <Box mb={3}>
                 <Button
                     startIcon={<ArrowBackOutlinedIcon />}

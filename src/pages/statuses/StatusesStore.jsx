@@ -43,7 +43,7 @@ export const StatusesStore = () => {
                 renderCell: (params) => {
                     if (!params.value) return "—";
                     return (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1, height: "100%" }}>
                             <Box sx={{
                                 width: 16, height: 16, borderRadius: "3px",
                                 backgroundColor: params.value,

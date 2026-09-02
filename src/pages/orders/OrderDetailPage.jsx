@@ -31,7 +31,10 @@ const OrderDetailPage = () => {
 
     return (
         <Box p={2}>
-            <Header title={`Order #${id}`} subtitle="View and manage order details" />
+            <Header
+                title={`Order #${id}${order?.contact ? ` - ${[order.contact.firstName, order.contact.lastName].filter(Boolean).join(' ')}` : ''}`}
+                subtitle="View and manage order details"
+            />
             <Box mb={3}>
                 <Button
                     startIcon={<ArrowBackOutlinedIcon />}

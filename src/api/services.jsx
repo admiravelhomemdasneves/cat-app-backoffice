@@ -72,6 +72,10 @@ const Services = {
   GET_ID_ORDER : `/order`,
   ORDER_INACTIVATE : `/order/inactivate`,
   PUT_ID_ORDER : `/order`,
+
+  GET_ALL_MATERIALS:   `/material`,
+  SAVE_MATERIAL:       `/material`,
+  INACTIVATE_MATERIAL: `/material/inactivate`,
 }
 
 export default Services;

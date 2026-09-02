@@ -3,15 +3,15 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, CircularProgress, Paper } from "@mui/material";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Header from "../../components/Header";
-import ProductForm from "./components/ProductForm";
-import { ProductDetailPageStore } from "./ProductDetailPageStore";
+import MaterialForm from "./components/MaterialForm";
+import { MaterialDetailPageStore } from "./MaterialDetailPageStore";
 
-const ProductDetailPage = () => {
+const MaterialDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { state } = useLocation();
 
-    const { isPending, product, updateProduct } = ProductDetailPageStore(Number(id), state?.product ?? null);
+    const { isPending, material, updateMaterial } = MaterialDetailPageStore(Number(id), state?.material ?? null);
 
     if (isPending) {
         return <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh"><CircularProgress /></Box>;
@@ -20,8 +20,8 @@ const ProductDetailPage = () => {
     return (
         <Box p={2}>
             <Header
-                title={`Product #${id}${product?.name ? ` - ${product.name}` : ''}`}
-                subtitle="View and manage product details"
+                title={`Material #${id}${material?.name ? ` - ${material.name}` : ''}`}
+                subtitle="View and manage material details"
             />
             <Box mb={3}>
                 <Button
@@ -34,10 +34,10 @@ const ProductDetailPage = () => {
                 </Button>
             </Box>
             <Paper sx={{ p: 3 }}>
-                <ProductForm initialData={product} onChange={updateProduct} />
+                <MaterialForm initialData={material} onChange={updateMaterial} />
             </Paper>
         </Box>
     );
 };
 
-export default ProductDetailPage;
+export default MaterialDetailPage;

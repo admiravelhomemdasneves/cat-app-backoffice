@@ -31,7 +31,7 @@ export const ProductParametersStore = () => {
                     const colorName = params.row.colorName;
                     if (!colorCode && !colorName) return "N/A";
                     return (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1, height: "100%" }}>
                             {colorCode && (
                                 <Box sx={{
                                     width: 16, height: 16, borderRadius: "3px",
