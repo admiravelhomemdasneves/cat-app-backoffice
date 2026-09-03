@@ -32,6 +32,7 @@ const ColaboratorsPage = () => {
                     allowAdd={canCreate}
                     allowEdit={canEdit}
                     allowDelete={canDelete}
+                    allowDuplicate={false}
                 />
             </Box>
         </Box>

@@ -70,6 +70,15 @@ class ApiClient {
     return this.client.put(path, data);
   }
 
+  async uploadFile(path, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await this.client.post(path, formData, {
+      headers: { 'Content-Type': undefined },
+    });
+    return response.data;
+  }
+
   delete(path) {
     return this.client.delete(path);
   }

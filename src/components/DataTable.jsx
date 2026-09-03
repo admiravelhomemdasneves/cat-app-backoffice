@@ -8,6 +8,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
 import CheckIcon from '@mui/icons-material/Check';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { tokens } from "../theme";
 import * as XLSX from 'xlsx';
 
@@ -18,6 +19,7 @@ const DataTable = ({
     allowAdd = true,
     allowEdit = true,
     allowDelete = true,
+    allowDuplicate = true,
     initialSortModel = [],
     loading = false,
     autoHeight = false,
@@ -61,6 +63,9 @@ const DataTable = ({
                 const actions = [];
                 if (allowEdit) actions.push(
                     <GridActionsCellItem key="edit" icon={<EditIcon />} label="Edit" className="textPrimary" onClick={handleEditClick(id)} color="inherit" />
+                );
+                if (allowAdd && allowDuplicate) actions.push(
+                    <GridActionsCellItem key="duplicate" icon={<ContentCopyIcon />} label="Duplicate" onClick={handleDuplicateClick(id)} color="inherit" />
                 );
                 if (allowDelete) actions.push(
                     <GridActionsCellItem key="delete" icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />
@@ -143,6 +148,13 @@ const DataTable = ({
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+
+    const handleDuplicateClick = (id) => () => {
+        const row = rows.find((r) => r[rowIdField] === id);
+        if (!row) return;
+        const { [rowIdField]: _ignored, isNew: _isNew, ...rest } = row;
+        updateHook({ ...rest, [rowIdField]: null });
     };
 
     const handleDeleteClick = (id) => () => {
