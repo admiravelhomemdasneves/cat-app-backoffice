@@ -15,14 +15,15 @@ const OrderDetailPage = () => {
         isPending,
         order,
         orderUpdateHook,
+        contactUpdateHook,
         contactOptions,
         statusOptions,
         prioritiesOptions,
-        detailRowIdField,
-        detailColumnsDefinition,
-        detailSampleRow,
-        detailUpdateHook,
-        detailDeleteHook,
+        contentsRowIdField,
+        contentsColumnsDefinition,
+        contentsSampleRow,
+        contentsUpdateHook,
+        contentsDeleteHook,
     } = OrderDetailPageStore(Number(id), state?.order ?? null);
 
     if (isPending) {
@@ -47,16 +48,18 @@ const OrderDetailPage = () => {
             </Box>
             <OrderDetailsView
                 order={order}
-                columnsDefinition={detailColumnsDefinition}
-                sampleRow={detailSampleRow}
-                rowIdField={detailRowIdField}
                 orderUpdateHook={orderUpdateHook}
-                productUpdateHook={detailUpdateHook}
-                productDeleteHook={detailDeleteHook}
+                contactUpdateHook={contactUpdateHook}
                 contactOptions={contactOptions ?? []}
                 statusOptions={statusOptions ?? []}
                 prioritiesOptions={prioritiesOptions ?? []}
+                contentsColumnsDefinition={contentsColumnsDefinition}
+                contentsSampleRow={contentsSampleRow}
+                contentsRowIdField={contentsRowIdField}
+                contentsUpdateHook={contentsUpdateHook}
+                contentsDeleteHook={contentsDeleteHook}
                 borderLeft={0}
+                twoColumn={true}
             />
         </Box>
     );

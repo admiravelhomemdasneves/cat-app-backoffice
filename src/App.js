@@ -6,7 +6,6 @@ import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
 import ContactsPage from './pages/contacts/ContactsPage';
 import DashboardPage from './pages/DashboardPage';
-import ProductsPage from './pages/products/ProductsPage';
 import StatusesPage from './pages/statuses/StatusesPage';
 import PrioritiesPage from './pages/priorities/PrioritiesPage';
 import PrintingServicesPage from './pages/printingServices/PrintingServicesPage';
@@ -15,7 +14,6 @@ import OrdersPage from './pages/orders/OrdersPage';
 import UserSettingsPage from './pages/userSettings/UserSettingsPage';
 import OrderDetailPage from './pages/orders/OrderDetailPage';
 import ContactDetailPage from './pages/contacts/ContactDetailPage';
-import ProductDetailPage from './pages/products/ProductDetailPage';
 import CompanySettingsPage from './pages/companySettings/CompanySettingsPage';
 import ColaboratorsPage from './pages/colaborators/ColaboratorsPage';
 import RolesPage from './pages/roles/RolesPage';
@@ -54,8 +52,6 @@ function App() {
                       <Route path="/orders/:id" element={<PermissionRoute path="/orders" element={<OrderDetailPage />} />} />
                       <Route path="/contacts" element={<PermissionRoute path="/contacts" element={<ContactsPage />} />} />
                       <Route path="/contacts/:id" element={<PermissionRoute path="/contacts" element={<ContactDetailPage />} />} />
-                      <Route path="/products" element={<PermissionRoute path="/products" element={<ProductsPage />} />} />
-                      <Route path="/products/:id" element={<PermissionRoute path="/products" element={<ProductDetailPage />} />} />
                       <Route path="/orderStatus" element={<PermissionRoute path="/orderStatus" element={<StatusesPage />} />} />
                       <Route path="/orderPriority" element={<PermissionRoute path="/orderPriority" element={<PrioritiesPage />} />} />
                       <Route path="/printingService" element={<PermissionRoute path="/printingService" element={<PrintingServicesPage />} />} />

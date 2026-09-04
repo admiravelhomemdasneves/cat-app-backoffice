@@ -4,10 +4,13 @@ import { useGetOrderStatus } from '../../api/orderStatus/getOrderStatus';
 import { useGetContacts } from '../../api/contacts/getContacts';
 import { useGetPriorities } from '../../api/priorities/getPriorities';
 import { useUpdateOrderDTO, useInactivateOrder } from "../../api/orders/createOrder";
-import { useGetProductParameters } from '../../api/products/getProducts';
+import { useUpdateContact } from "../../api/contacts/createContacts";
 import { useGetPrintingServices } from '../../api/printingServices/getPrintingServices';
-import { useUpdateOrderItemDTO, useInactivateOrderItem } from '../../api/orderProducts/createOrderProducts';
-import AutocompleteProductSelector from "./components/AutocompleteProductSelector";
+import { useUpdateOrderItem, useInactivateOrderItem, useCalculateOrderItemPrice } from '../../api/orderItems/createOrderItems';
+import { useGetMaterials } from '../../api/materials/getMaterials';
+import { Autocomplete, TextField, Box, Tooltip, IconButton, Typography } from "@mui/material";
+import BoltIcon from '@mui/icons-material/Bolt';
+import FunctionsIcon from '@mui/icons-material/Functions';
 
 export const OrdersStore = () => {
     const { data: gridData, isPending } = useGetOrders();
@@ -16,13 +19,14 @@ export const OrdersStore = () => {
     const { data: priorities } = useGetPriorities();
     const { mutate: updateOrder } = useUpdateOrderDTO();
     const { mutate: inactivateOrder } = useInactivateOrder();
+    const { mutate: updateContact } = useUpdateContact();
     const contactsOptions = contacts && contacts.map(entry => ({ id: entry.idContact, label: `${entry.firstName || " "} ${entry.lastName || " "}`, value: entry }));
     const statusOptions = orderStatus && orderStatus.map(entry => ({ id: entry.id_status, label: entry.name, value: entry }));
     const prioritiesOptions = priorities && priorities.map(entry => ({ id: entry.id_priority, label: entry.name, value: entry }));
 
     return {
         pageTitle: "ORDERS",
-        pageSubtitle: "Welcome to your orders page", 
+        pageSubtitle: "Welcome to your orders page",
         rowIdField : 'idOrder',
         gridData : gridData || [],
         isPending,
@@ -95,178 +99,242 @@ export const OrdersStore = () => {
         },
         contactOptions: contactsOptions,
         statusOptions: statusOptions,
-        prioritiesOptions: prioritiesOptions
+        prioritiesOptions: prioritiesOptions,
+        contactUpdateHook: updateContact,
     }
 };
 
 export const OrderDetailStore = () => {
-    const { data: products } = useGetProductParameters();
     const { data: printingServices } = useGetPrintingServices();
-    const { mutate: updateOrderProduct } = useUpdateOrderItemDTO();
-    const { mutate: inactivateOrderProduct } = useInactivateOrderItem(); 
-
-    const distinctProducts = Object.values(
-        (products ?? []).reduce((acc, param) => {
-            if (!acc[param.idProduct]) {
-                acc[param.idProduct] = {
-                    idProduct: param.idProduct,
-                    idProductParameter: param.idProductParameter,
-                    name: `${param.brand || ""} - ${param.name || ""}`,
-                    imageUrl: param.defaultSku ? param.imageUrl : null,
-                    colorName: param.defaultSku ? param.colorName : null,
-                    colorCode: param.defaultSku ? param.colorCode : null,
-                    size: param.defaultSku ? param.size : null,
-                };
-            } else if (param.defaultSku) {
-                acc[param.idProduct].idProductParameter = param.idProductParameter;
-                acc[param.idProduct].imageUrl = param.imageUrl;
-                acc[param.idProduct].colorName = param.colorName;
-                acc[param.idProduct].colorCode = param.colorCode;
-                acc[param.idProduct].size = param.size;
-            }
-            return acc;
-        }, {})
-    );
-
-    const distinctColorOptionsFormatter = (idProduct) => {
-        return Object.values(
-            (products ?? [])
-                .filter(p => p.idProduct === idProduct)
-                .reduce((acc, param) => {
-                    const key = param.colorCode ?? "null";
-                    if (!acc[key]) {
-                        acc[key] = {
-                            colorName: param.colorName ?? "N/A",
-                            colorCode: param.colorCode ?? null,
-                            imageUrl: param.imageUrl,
-                        };
-                    }
-                    return acc;
-                }, {})
-        );
-    };
-
-    const distinctSizeOptionsFormatter = (idProduct, colorCode) => {
-        return Object.values(
-            (products ?? [])
-                .filter(p => {
-                    const colorMatch = colorCode == null
-                        ? p.colorCode == null
-                        : p.colorCode === colorCode;
-                    return p.idProduct === idProduct && colorMatch;
-                })
-                .reduce((acc, param) => {
-                    const sizeValue = param.size || null;  // ← treats "" as null
-                    const key = sizeValue ?? "null";
-                    if (!acc[key]) {
-                        acc[key] = {
-                            id: param.idProductParameter,
-                            name: sizeValue ?? "N/A",      // ← "" becomes "N/A"
-                            imageUrl: param.imageUrl,
-                        };
-                    }
-                    return acc;
-                }, {})
-        );
-    };
+    const { data: materials } = useGetMaterials();
+    const { mutate: updateOrderItem } = useUpdateOrderItem();
+    const { mutate: inactivateOrderItem } = useInactivateOrderItem();
+    const { mutateAsync: calculatePrice } = useCalculateOrderItemPrice();
 
     return {
-        detailRowIdField: 'idOrderItem',
-        detailUpdateHook: updateOrderProduct,
-        detailDeleteHook: inactivateOrderProduct,
-        detailColumnsDefinition: [
+        contentsRowIdField: 'idOrderItem',
+        contentsUpdateHook: updateOrderItem,
+        contentsDeleteHook: inactivateOrderItem,
+        contentsColumnsDefinition: [
             {
-                field: "product",
-                headerName: "PRODUCT",
-                flex: 1.2,
+                field: "material",
+                headerName: "MATERIAL",
                 editable: true,
-                valueGetter: (value, row) => {
-                    if (!row.product) return null;
-                    return distinctProducts.find(p => p.idProduct === row.product.idProduct) ?? null;
-                },
-                renderEditCell: (params) => (
-                    <AutocompleteProductSelector
-                        products={products ?? []}
-                        distinctProducts={distinctProducts}
-                        distinctColorOptionsFormatter={distinctColorOptionsFormatter}
-                        distinctSizeOptionsFormatter={distinctSizeOptionsFormatter}
-                        value={params.value}
-                        onChange={(resolved) => {
-                            params.api.setEditCellValue({ id: params.id, field: "product", value: resolved });
-                        }}
-                        width={600}
-                        previewWidth={250}
-                    />
-                ),
+                flex: 1.0,
+                valueGetter: (value) => value ?? null,
                 renderCell: (params) => {
-                    const product = params.value;
-                    if (!product) return "—";
-                    const parts = [
-                        product.name,
-                        product.colorName,
-                        product.size
-                    ].filter(Boolean).join(" - ");
-                    return parts;
+                    const m = params.value;
+                    if (!m) return "—";
+                    return [m.brand, m.name].filter(Boolean).join(" - ");
+                },
+                renderEditCell: (params) => {
+                    const options = materials ?? [];
+                    return (
+                        <Autocomplete
+                            options={options}
+                            getOptionLabel={(opt) => [opt.brand, opt.name].filter(Boolean).join(" - ")}
+                            isOptionEqualToValue={(opt, val) => opt.idMaterial === val?.idMaterial}
+                            value={params.value ?? null}
+                            onChange={(_, newValue) => {
+                                params.api.setEditCellValue({ id: params.id, field: "material", value: newValue });
+                            }}
+                            renderOption={(props, option) => {
+                                const { key, ...rest } = props;
+                                const imageUrl = option.images?.[0]?.imageUrl;
+                                return (
+                                    <Box component="li" key={key} {...rest} sx={{ display: "flex", alignItems: "center", gap: 1.5, py: 0.5 }}>
+                                        <Box
+                                            sx={{
+                                                width: 44,
+                                                height: 44,
+                                                flexShrink: 0,
+                                                borderRadius: 1,
+                                                backgroundColor: "action.hover",
+                                                backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
+                                                backgroundSize: "contain",
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundPosition: "center",
+                                            }}
+                                        />
+                                        <Box>
+                                            <Typography variant="body2" fontWeight="bold" noWrap>
+                                                {option.name || "—"}
+                                            </Typography>
+                                            {option.brand && (
+                                                <Typography variant="caption" color="text.secondary" noWrap>
+                                                    {option.brand}
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    </Box>
+                                );
+                            }}
+                            renderInput={(inputParams) => (
+                                <TextField
+                                    {...inputParams}
+                                    variant="outlined"
+                                    autoFocus
+                                    sx={{ height: "100%", "& .MuiOutlinedInput-root": { height: "100%" } }}
+                                />
+                            )}
+                            sx={{ width: "100%", minWidth: 220, height: "100%" }}
+                            clearOnEscape
+                        />
+                    );
                 },
             },
             {
-                field: "printingService",
+                field: "service",
                 headerName: "SERVICE",
                 editable: true,
                 type: "singleSelect",
-                valueOptions: () => [{id: -1, label: 'Vazio'}, ...(printingServices?.map(entry => ({ id: entry.id_printing_service, label: entry.name })) ?? [])],
+                valueOptions: () => [{ id: -1, label: 'Vazio' }, ...(printingServices?.map(entry => ({ id: entry.id_printing_service, label: entry.name })) ?? [])],
                 getOptionValue: (value) => value.id,
                 getOptionLabel: (value) => value.label,
                 valueGetter: (value) => value && value.id_printing_service ? value.id_printing_service : -1,
-                valueSetter: (value, row) => ({ ...row, printingService: value !== -1 ? printingServices.find(entry => entry.id_printing_service === value) : null }),
-                flex: 0.5
+                valueSetter: (value, row) => ({ ...row, service: value !== -1 ? printingServices.find(entry => entry.id_printing_service === value) : null }),
+                flex: 0.7,
             },
             {
                 field: "quantity",
                 headerName: "QUANTITY",
-                editable: true,
-                flex: 0.4
-            },
-            {
-                field: "serviceHours",
-                headerName: "SVC HOURS",
                 editable: true,
                 type: "number",
                 flex: 0.4,
             },
             {
                 field: "serviceRate",
-                headerName: "SVC RATE",
+                headerName: "RATE",
+                editable: true,
+                type: "number",
+                flex: 0.5,
+                renderCell: (params) => params.value != null ? Number(params.value).toFixed(2) : "",
+                renderEditCell: (params) => {
+                    const service = params.row.service;
+                    const hasService = service != null;
+                    return (
+                        <Box display="flex" alignItems="center" width="100%" px={0.5} gap={0.5}>
+                            <TextField
+                                type="number"
+                                value={params.value ?? ""}
+                                onChange={(e) => {
+                                    const v = e.target.value;
+                                    params.api.setEditCellValue({
+                                        id: params.id,
+                                        field: "serviceRate",
+                                        value: v === "" ? null : Number(v),
+                                    });
+                                }}
+                                variant="standard"
+                                size="small"
+                                inputProps={{ style: { textAlign: "right" } }}
+                                sx={{ flex: 1 }}
+                                autoFocus
+                            />
+                            <Tooltip
+                                title="Fill with the selected service's current rate"
+                                placement="top"
+                                arrow
+                                enterDelay={700}
+                            >
+                                <span>
+                                    <IconButton
+                                        size="small"
+                                        disabled={!hasService}
+                                        onClick={() => {
+                                            params.api.setEditCellValue({
+                                                id: params.id,
+                                                field: "serviceRate",
+                                                value: service.rate || null,
+                                            });
+                                        }}
+                                        tabIndex={-1}
+                                    >
+                                        <BoltIcon fontSize="small" />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                        </Box>
+                    );
+                },
+            },
+            {
+                field: "serviceHours",
+                headerName: "WORK HOURS",
                 editable: true,
                 type: "number",
                 flex: 0.4,
-                valueFormatter: (value) => value != null ? value.toFixed(2) : "—",
             },
             {
-                field: "unitPrice",
-                headerName: "UNIT PRICE",
+                field: "price",
+                headerName: "PRICE",
                 editable: true,
                 type: "number",
-                flex: 0.4,
-                valueFormatter: (value) => value != null ? value.toFixed(2) : "—",
-            },
-            {
-                field: "description",
-                headerName: "NOTES",
-                editable: true,
-                flex: 1
+                flex: 0.5,
+                renderCell: (params) => params.value != null ? Number(params.value).toFixed(2) : "",
+                renderEditCell: (params) => {
+                    const hasId = params.row.idOrderItem != null;
+                    return (
+                        <Box display="flex" alignItems="center" width="100%" px={0.5} gap={0.5}>
+                            <TextField
+                                type="number"
+                                value={params.value ?? ""}
+                                onChange={(e) => {
+                                    const v = e.target.value;
+                                    params.api.setEditCellValue({
+                                        id: params.id,
+                                        field: "price",
+                                        value: v === "" ? null : Number(v),
+                                    });
+                                }}
+                                variant="standard"
+                                size="small"
+                                inputProps={{ style: { textAlign: "right" } }}
+                                sx={{ flex: 1 }}
+                                autoFocus
+                            />
+                            <Tooltip
+                                title="Calculate: material retail price × quantity, plus service rate × work hours (or × quantity for per-unit services)"
+                                placement="top"
+                                arrow
+                                enterDelay={700}
+                            >
+                                <span>
+                                    <IconButton
+                                        size="small"
+                                        disabled={!hasId}
+                                        onClick={async () => {
+                                            try {
+                                                const result = await calculatePrice(params.row.idOrderItem);
+                                                if (result?.price != null) {
+                                                    params.api.setEditCellValue({
+                                                        id: params.id,
+                                                        field: "price",
+                                                        value: result.price,
+                                                    });
+                                                }
+                                            } catch (_) {}
+                                        }}
+                                        tabIndex={-1}
+                                    >
+                                        <FunctionsIcon fontSize="small" />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                        </Box>
+                    );
+                },
             },
         ],
-        detailSampleRow: {
+        contentsSampleRow: {
             idOrderItem: null,
-            description: null,
-            product: null,
-            printingService: null,
-            quantity: 0,
-            serviceHours: null,
+            material: null,
+            service: null,
+            quantity: null,
             serviceRate: null,
-            unitPrice: null,
-            flagActive: true
-        }
+            serviceHours: null,
+            price: null,
+            flagActive: true,
+        },
     };
 };

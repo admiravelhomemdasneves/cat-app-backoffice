@@ -173,16 +173,6 @@ const Sidebar = () => {
                 />
             )}
 
-            {canViewPage('/products') && (
-                <Item
-                    title="Products"
-                    to="/products"
-                    icon={<CategoryIcon/>}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
-            )}
-
             {canViewPage('/material') && (
                 <Item
                     title="Materials"

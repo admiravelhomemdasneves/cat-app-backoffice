@@ -7,8 +7,10 @@ import OrderDetailsView from "./components/OrderDetailsView";
 import { usePagePermission } from "../../hooks/usePagePermission";
 
 const OrdersPage = () => {
-  const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, isPending, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions} = OrdersStore();
-  const {detailRowIdField, detailUpdateHook, detailDeleteHook, detailColumnsDefinition, detailSampleRow} = OrderDetailStore();
+  const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, isPending, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions, contactUpdateHook} = OrdersStore();
+  const {
+    contentsRowIdField, contentsUpdateHook, contentsDeleteHook, contentsColumnsDefinition, contentsSampleRow,
+  } = OrderDetailStore();
   const { canCreate, canEdit, canDelete } = usePagePermission('/orders');
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const selectedOrder = gridData.find(o => o[rowIdField] === selectedOrderId) ?? null;
@@ -17,9 +19,9 @@ const OrdersPage = () => {
 
   return (
     <Box p={2}>
-      <Header 
-        title={pageTitle} 
-        subtitle={pageSubtitle} 
+      <Header
+        title={pageTitle}
+        subtitle={pageSubtitle}
       />
       <Grid container spacing={2}>
         <Grid item xs={gridSize}>
@@ -41,17 +43,18 @@ const OrdersPage = () => {
         </Grid>
         {selectedOrder && (
           <Grid item xs={12 - gridSize}>
-            <OrderDetailsView 
+            <OrderDetailsView
               order={selectedOrder}
-              columnsDefinition={detailColumnsDefinition}
-              sampleRow={detailSampleRow}
-              rowIdField={detailRowIdField}
               orderUpdateHook={updateHook}
-              productUpdateHook={detailUpdateHook}
-              productDeleteHook={detailDeleteHook}
+              contactUpdateHook={contactUpdateHook}
               contactOptions={contactOptions}
               statusOptions={statusOptions}
               prioritiesOptions={prioritiesOptions}
+              contentsColumnsDefinition={contentsColumnsDefinition}
+              contentsSampleRow={contentsSampleRow}
+              contentsRowIdField={contentsRowIdField}
+              contentsUpdateHook={contentsUpdateHook}
+              contentsDeleteHook={contentsDeleteHook}
             />
           </Grid>
         )}
