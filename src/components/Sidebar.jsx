@@ -8,7 +8,6 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import CategoryIcon from '@mui/icons-material/Category';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import PrintIcon from '@mui/icons-material/Print';
@@ -243,6 +242,16 @@ const Sidebar = () => {
                 </Typography>
             )}
 
+            {canViewPage('/colaborators') && (
+                <Item
+                    title="Colaborators"
+                    to="/colaborators"
+                    icon={<PeopleAltOutlinedIcon/>}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
+
             <Item
                 title="User Settings"
                 to="/settings"
@@ -258,16 +267,6 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
-
-            {canViewPage('/colaborators') && (
-                <Item
-                    title="Colaborators"
-                    to="/colaborators"
-                    icon={<PeopleAltOutlinedIcon/>}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
-            )}
           </Box>
         </Menu>
       </ProSidebar>

@@ -7,8 +7,23 @@ export const useUpdateOrderDTO = (data) => {
 
     return useMutation({
         mutationFn: async (data) => { return await apiClient.post(Services.BO_SAVE_ORDER, data); },
-        onSuccess: () => { queryClient.invalidateQueries('orders'); },
+        onSuccess: () => {
+            queryClient.invalidateQueries('orders');
+            queryClient.invalidateQueries(['order']);
+        },
         //onError: (err) => { console.log("ERROR UPDATING ROW", err); }
+    });
+};
+
+export const useRecalculateOrder = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id) => await apiClient.get(`${Services.BO_GET_ALL_ORDERS}/${id}/recalculate`),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['orders']);
+            queryClient.invalidateQueries(['order']);
+        },
     });
 };
 

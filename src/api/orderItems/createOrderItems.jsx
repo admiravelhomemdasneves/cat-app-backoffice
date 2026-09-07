@@ -7,7 +7,10 @@ export const useUpdateOrderItem = () => {
 
     return useMutation({
         mutationFn: async (data) => { return await apiClient.post(Services.BO_SAVE_ORDER_ITEM, data); },
-        onSuccess: () => { queryClient.invalidateQueries(['orders']); },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['orders']);
+            queryClient.invalidateQueries(['order']);
+        },
     });
 };
 
@@ -16,7 +19,10 @@ export const useInactivateOrderItem = () => {
 
     return useMutation({
         mutationFn: async (id) => { return await apiClient.get(Services.BO_INACTIVATE_ORDER_ITEM + "/" + id); },
-        onSuccess: () => { queryClient.invalidateQueries(['orders']); },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['orders']);
+            queryClient.invalidateQueries(['order']);
+        },
     });
 };
 

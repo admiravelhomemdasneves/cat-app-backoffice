@@ -16,6 +16,7 @@ const OrderDetailPage = () => {
         order,
         orderUpdateHook,
         contactUpdateHook,
+        recalculateHook,
         contactOptions,
         statusOptions,
         prioritiesOptions,
@@ -50,6 +51,7 @@ const OrderDetailPage = () => {
                 order={order}
                 orderUpdateHook={orderUpdateHook}
                 contactUpdateHook={contactUpdateHook}
+                recalculateHook={recalculateHook}
                 contactOptions={contactOptions ?? []}
                 statusOptions={statusOptions ?? []}
                 prioritiesOptions={prioritiesOptions ?? []}

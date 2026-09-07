@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { OrdersStore, OrderDetailStore } from "./OrdersStore";
+import { useRecalculateOrder } from "../../api/orders/createOrder";
 import { Box, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import DataTable from "../../components/DataTable";
@@ -11,6 +12,7 @@ const OrdersPage = () => {
   const {
     contentsRowIdField, contentsUpdateHook, contentsDeleteHook, contentsColumnsDefinition, contentsSampleRow,
   } = OrderDetailStore();
+  const { mutate: recalculateOrder } = useRecalculateOrder();
   const { canCreate, canEdit, canDelete } = usePagePermission('/orders');
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const selectedOrder = gridData.find(o => o[rowIdField] === selectedOrderId) ?? null;
@@ -47,6 +49,7 @@ const OrdersPage = () => {
               order={selectedOrder}
               orderUpdateHook={updateHook}
               contactUpdateHook={contactUpdateHook}
+              recalculateHook={recalculateOrder}
               contactOptions={contactOptions}
               statusOptions={statusOptions}
               prioritiesOptions={prioritiesOptions}

@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { VAT_COUNTRY_RATES } from '../../../constants/vatRates';
 import DataTable from "../../../components/DataTable";
 import ContactForm from "../../contacts/components/ContactForm";
 import { tokens } from "../../../theme";
@@ -32,6 +33,7 @@ const OrderDetailsView = ({
     contentsRowIdField,
     contentsUpdateHook,
     contentsDeleteHook,
+    recalculateHook,
     borderLeft = 1,
     twoColumn = false,
 }) => {
@@ -40,6 +42,9 @@ const OrderDetailsView = ({
 
     const [orderData, setOrderData] = useState(order);
     const [orderContents, setOrderContents] = useState([]);
+    const [vatRateInput, setVatRateInput] = useState(() => order?.vatRate != null ? String(order.vatRate) : "");
+    const [editingBillAddress, setEditingBillAddress] = useState(false);
+    const [billAddressForm, setBillAddressForm] = useState({ street: "", door_number: "", zip_code: "", city: "", country: "" });
 
     // Create-new-contact dialog
     const [createContactOpen, setCreateContactOpen] = useState(false);
@@ -52,6 +57,7 @@ const OrderDetailsView = ({
     useEffect(() => {
         setOrderData(order);
         setOrderContents(order?.orderContents ?? []);
+        setVatRateInput(order?.vatRate != null ? String(order.vatRate) : "");
     }, [order]);
 
     const contentsSampleRowWithOrder = { ...contentsSampleRow, idOrder: order?.idOrder };
@@ -85,6 +91,33 @@ const OrderDetailsView = ({
         setEditingAddress(null);
     };
 
+    const handleOpenBillAddressEdit = () => {
+        const existing = orderData?.billAddress ?? "";
+        const parts = existing.split(", ");
+        setBillAddressForm({
+            street:      parts[0] ?? "",
+            door_number: parts[1] ?? "",
+            zip_code:    parts[2] ?? "",
+            city:        parts[3] ?? "",
+            country:     parts[4] ?? "",
+        });
+        setEditingBillAddress(true);
+    };
+
+    const handleSaveBillAddress = () => {
+        const formatted = [
+            billAddressForm.street ?? "",
+            billAddressForm.door_number ?? "",
+            billAddressForm.zip_code ?? "",
+            billAddressForm.city ?? "",
+            billAddressForm.country ?? "",
+        ].join(", ");
+        const updated = { ...orderData, billAddress: formatted.replace(/^[,\s]+|[,\s]+$/g, '') || null };
+        setOrderData(updated);
+        orderUpdateHook?.(updated);
+        setEditingBillAddress(false);
+    };
+
     const handleCreateContact = () => {
         contactUpdateHook?.(newContactForm, {
             onSuccess: (createdContact) => {
@@ -98,6 +131,98 @@ const OrderDetailsView = ({
     };
 
     // ── Sub-sections ────────────────────────────────────────────────────────────
+
+    const billingAccordion = (
+        <Accordion defaultExpanded sx={accordionSx}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography component="span" variant="h5" color={colors.grey[100]} fontWeight="bold">
+                    BILLING INFORMATION
+                </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={6}>
+                        <Autocomplete
+                            freeSolo
+                            options={VAT_COUNTRY_RATES}
+                            getOptionLabel={(option) => typeof option === 'string' ? option : option.label}
+                            inputValue={vatRateInput}
+                            onInputChange={(_, val) => setVatRateInput(val)}
+                            onChange={(_, newValue) => {
+                                const rate = typeof newValue === 'object' && newValue !== null
+                                    ? newValue.rate
+                                    : (newValue !== '' && newValue !== null ? Number(newValue) : null);
+                                const updated = { ...orderData, vatRate: (rate != null && !isNaN(rate)) ? rate : null };
+                                setOrderData(updated);
+                                orderUpdateHook?.(updated);
+                            }}
+                            onBlur={() => {
+                                const rate = Number(vatRateInput);
+                                if (vatRateInput !== '' && !isNaN(rate)) {
+                                    const updated = { ...orderData, vatRate: rate };
+                                    setOrderData(updated);
+                                    orderUpdateHook?.(updated);
+                                }
+                            }}
+                            renderOption={(props, option) => <li {...props} key={option.label}>{option.label}</li>}
+                            renderInput={(params) => (
+                                <TextField {...params} label="VAT Rate" size="small" fullWidth sx={fieldSx} />
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            label="Order Price"
+                            type="number"
+                            fullWidth
+                            size="small"
+                            value={orderData?.totalAmount ?? ""}
+                            sx={fieldSx}
+                            onChange={(e) => {
+                                const updated = { ...orderData, totalAmount: e.target.value !== "" ? Number(e.target.value) : null };
+                                setOrderData(updated);
+                                orderUpdateHook?.(updated);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="NIF"
+                            fullWidth
+                            size="small"
+                            value={orderData?.nif ?? ""}
+                            sx={fieldSx}
+                            onChange={(e) => {
+                                const updated = { ...orderData, nif: e.target.value || null };
+                                setOrderData(updated);
+                                orderUpdateHook?.(updated);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Bill Address"
+                            fullWidth
+                            size="small"
+                            value={(orderData?.billAddress ?? "").split(", ").filter(Boolean).join(", ")}
+                            disabled
+                            sx={fieldSx}
+                            InputProps={{
+                                readOnly: true,
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton size="small" title="Edit bill address" onClick={handleOpenBillAddressEdit}>
+                                            <EditOutlinedIcon fontSize="small" />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
+                </Grid>
+            </AccordionDetails>
+        </Accordion>
+    );
 
     const orderContentsAccordion = contentsColumnsDefinition ? (
         <Accordion defaultExpanded sx={accordionSx}>
@@ -166,8 +291,27 @@ const OrderDetailsView = ({
                                 setOrderData(updatedOrder);
                             }}
                             renderInput={(params) => {
-                                const statusColor = orderData?.status?.colorCode ?? alpha(colors.primary[500], 0.6);
-                                return <TextField {...params} label="Status" variant="outlined" size="small" sx={{ backgroundColor: statusColor, borderRadius: 1 }} />;
+                                const statusColor = orderData?.status?.colorCode;
+                                return (
+                                    <TextField
+                                        {...params}
+                                        label="Status"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={fieldSx}
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <>
+                                                    {statusColor && (
+                                                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: statusColor, flexShrink: 0, mr: 0.75 }} />
+                                                    )}
+                                                    {params.InputProps.startAdornment}
+                                                </>
+                                            ),
+                                        }}
+                                    />
+                                );
                             }}
                         />
                     </Grid>
@@ -182,8 +326,27 @@ const OrderDetailsView = ({
                                 setOrderData(updatedOrder);
                             }}
                             renderInput={(params) => {
-                                const priorityColor = orderData?.priority?.colorCode ?? alpha(colors.primary[500], 0.6);
-                                return <TextField {...params} label="Priority" variant="outlined" size="small" sx={{ backgroundColor: priorityColor, borderRadius: 1 }} />;
+                                const priorityColor = orderData?.priority?.colorCode;
+                                return (
+                                    <TextField
+                                        {...params}
+                                        label="Priority"
+                                        variant="outlined"
+                                        size="small"
+                                        sx={fieldSx}
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <>
+                                                    {priorityColor && (
+                                                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: priorityColor, flexShrink: 0, mr: 0.75 }} />
+                                                    )}
+                                                    {params.InputProps.startAdornment}
+                                                </>
+                                            ),
+                                        }}
+                                    />
+                                );
                             }}
                         />
                     </Grid>
@@ -246,7 +409,12 @@ const OrderDetailsView = ({
                                     setCreateContactOpen(true);
                                     return;
                                 }
-                                const updatedOrder = { ...orderData, contact: value?.value ?? null };
+                                const newContact = value?.value ?? null;
+                                const b = newContact?.billingAddress;
+                                const addr = b
+                                    ? [b.street ?? "", b.door_number ?? "", b.zip_code ?? "", b.city ?? "", b.country ?? ""].join(", ").replace(/^[,\s]+|[,\s]+$/g, '')
+                                    : null;
+                                const updatedOrder = { ...orderData, contact: newContact, billAddress: addr || null, nif: newContact?.nif ?? null };
                                 orderUpdateHook?.(updatedOrder);
                                 setOrderData(updatedOrder);
                             }}
@@ -406,6 +574,7 @@ const OrderDetailsView = ({
                     <Grid item xs={4}>
                         <Box display="flex" flexDirection="column" gap={1}>
                             {orderDetailsAccordion}
+                            {billingAccordion}
                             {clientDetailsAccordion}
                         </Box>
                     </Grid>
@@ -413,6 +582,7 @@ const OrderDetailsView = ({
             ) : (
                 <Box display="flex" flexDirection="column" gap={1}>
                     {orderDetailsAccordion}
+                    {billingAccordion}
                     {clientDetailsAccordion}
                     {orderContentsAccordion}
                     {notesAccordion}
@@ -420,6 +590,37 @@ const OrderDetailsView = ({
             )}
             {addressDialog}
             {createContactDialog}
+            <Dialog open={editingBillAddress} onClose={() => setEditingBillAddress(false)} maxWidth="sm" fullWidth>
+                <DialogTitle>Edit Bill Address</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2} mt={0}>
+                        <Grid item xs={8}>
+                            <TextField fullWidth label="Street" size="small" value={billAddressForm.street ?? ""}
+                                onChange={(e) => setBillAddressForm(f => ({ ...f, street: e.target.value }))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField fullWidth label="Door Number" size="small" value={billAddressForm.door_number ?? ""}
+                                onChange={(e) => setBillAddressForm(f => ({ ...f, door_number: e.target.value }))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField fullWidth label="Zip Code" size="small" value={billAddressForm.zip_code ?? ""}
+                                onChange={(e) => setBillAddressForm(f => ({ ...f, zip_code: e.target.value }))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField fullWidth label="City" size="small" value={billAddressForm.city ?? ""}
+                                onChange={(e) => setBillAddressForm(f => ({ ...f, city: e.target.value }))} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField fullWidth label="Country" size="small" value={billAddressForm.country ?? ""}
+                                onChange={(e) => setBillAddressForm(f => ({ ...f, country: e.target.value }))} />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setEditingBillAddress(false)}>Cancel</Button>
+                    <Button variant="contained" onClick={handleSaveBillAddress}>Save</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

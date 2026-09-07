@@ -6,7 +6,7 @@ import { useGetPriorities } from '../../api/priorities/getPriorities';
 import { useUpdateOrderDTO, useInactivateOrder } from "../../api/orders/createOrder";
 import { useUpdateContact } from "../../api/contacts/createContacts";
 import { useGetPrintingServices } from '../../api/printingServices/getPrintingServices';
-import { useUpdateOrderItem, useInactivateOrderItem, useCalculateOrderItemPrice } from '../../api/orderItems/createOrderItems';
+import { useUpdateOrderItem, useInactivateOrderItem } from '../../api/orderItems/createOrderItems';
 import { useGetMaterials } from '../../api/materials/getMaterials';
 import { Autocomplete, TextField, Box, Tooltip, IconButton, Typography } from "@mui/material";
 import BoltIcon from '@mui/icons-material/Bolt';
@@ -109,8 +109,6 @@ export const OrderDetailStore = () => {
     const { data: materials } = useGetMaterials();
     const { mutate: updateOrderItem } = useUpdateOrderItem();
     const { mutate: inactivateOrderItem } = useInactivateOrderItem();
-    const { mutateAsync: calculatePrice } = useCalculateOrderItemPrice();
-
     return {
         contentsRowIdField: 'idOrderItem',
         contentsUpdateHook: updateOrderItem,
@@ -137,6 +135,8 @@ export const OrderDetailStore = () => {
                             value={params.value ?? null}
                             onChange={(_, newValue) => {
                                 params.api.setEditCellValue({ id: params.id, field: "material", value: newValue });
+                                const costPrice = newValue?.costPrice?.priceValue ?? null;
+                                params.api.setEditCellValue({ id: params.id, field: "expenses", value: costPrice });
                             }}
                             renderOption={(props, option) => {
                                 const { key, ...rest } = props;
@@ -273,7 +273,6 @@ export const OrderDetailStore = () => {
                 flex: 0.5,
                 renderCell: (params) => params.value != null ? Number(params.value).toFixed(2) : "",
                 renderEditCell: (params) => {
-                    const hasId = params.row.idOrderItem != null;
                     return (
                         <Box display="flex" alignItems="center" width="100%" px={0.5} gap={0.5}>
                             <TextField
@@ -302,18 +301,33 @@ export const OrderDetailStore = () => {
                                 <span>
                                     <IconButton
                                         size="small"
-                                        disabled={!hasId}
-                                        onClick={async () => {
-                                            try {
-                                                const result = await calculatePrice(params.row.idOrderItem);
-                                                if (result?.price != null) {
-                                                    params.api.setEditCellValue({
-                                                        id: params.id,
-                                                        field: "price",
-                                                        value: result.price,
-                                                    });
+                                        onClick={() => {
+                                            const row = params.row;
+                                            const qty = row.quantity != null ? Number(row.quantity) : 0;
+                                            const rate = row.serviceRate != null ? Number(row.serviceRate) : 0;
+                                            const hours = row.serviceHours != null ? Number(row.serviceHours) : 0;
+                                            const rateType = row.service?.rateType;
+
+                                            let price = 0;
+
+                                            const retailUnit = row.material?.retailPrice?.priceValue;
+                                            if (retailUnit != null) {
+                                                price += Number(retailUnit) * qty;
+                                            }
+
+                                            if (rate > 0) {
+                                                if (rateType === "HOURLY") {
+                                                    price += rate * hours;
+                                                } else if (rateType === "PER_UNIT") {
+                                                    price += rate * qty;
                                                 }
-                                            } catch (_) {}
+                                            }
+
+                                            params.api.setEditCellValue({
+                                                id: params.id,
+                                                field: "price",
+                                                value: price,
+                                            });
                                         }}
                                         tabIndex={-1}
                                     >
@@ -325,6 +339,14 @@ export const OrderDetailStore = () => {
                     );
                 },
             },
+            {
+                field: "expenses",
+                headerName: "EXPENSES",
+                editable: true,
+                type: "number",
+                flex: 0.5,
+                renderCell: (params) => params.value != null ? Number(params.value).toFixed(2) : "",
+            },
         ],
         contentsSampleRow: {
             idOrderItem: null,
@@ -334,6 +356,7 @@ export const OrderDetailStore = () => {
             serviceRate: null,
             serviceHours: null,
             price: null,
+            expenses: null,
             flagActive: true,
         },
     };

@@ -52,8 +52,8 @@ export const PrintingServicesStore = () => {
             "id_printing_service": null,
             "name": "",
             "description": "",
-            "rate": null,
-            "rateType": null,
+            "rate": 0,
+            "rateType": "HOURLY",
             "flagActive": true
         }
     };
