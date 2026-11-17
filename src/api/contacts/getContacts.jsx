@@ -10,5 +10,5 @@ export const useGetContacts = () => {
         return response;
     }})
 
-    if (!isPending && !error && data) return data;
+    return { data, isPending, error };
 };

@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { OrdersStore, OrderDetailStore } from "./OrdersStore";
+import { useRecalculateOrder } from "../../api/orders/createOrder";
 import { Box, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import DataTable from "../../components/DataTable";
 import OrderDetailsView from "./components/OrderDetailsView";
+import { usePagePermission } from "../../hooks/usePagePermission";
 
 const OrdersPage = () => {
-  const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions} = OrdersStore();
-  const {detailRowIdField, detailUpdateHook, detailDeleteHook, detailColumnsDefinition, detailSampleRow} = OrderDetailStore();
+  const {pageTitle, pageSubtitle, columnsDefinition, rowIdField, sampleRow, gridData, isPending, updateHook, deleteHook, contactOptions, statusOptions, prioritiesOptions, contactUpdateHook} = OrdersStore();
+  const {
+    contentsRowIdField, contentsUpdateHook, contentsDeleteHook, contentsColumnsDefinition, contentsSampleRow,
+  } = OrderDetailStore();
+  const { mutate: recalculateOrder } = useRecalculateOrder();
+  const { canCreate, canEdit, canDelete } = usePagePermission('/orders');
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const selectedOrder = gridData.find(o => o[rowIdField] === selectedOrderId) ?? null;
 
@@ -15,9 +21,9 @@ const OrdersPage = () => {
 
   return (
     <Box p={2}>
-      <Header 
-        title={pageTitle} 
-        subtitle={pageSubtitle} 
+      <Header
+        title={pageTitle}
+        subtitle={pageSubtitle}
       />
       <Grid container spacing={2}>
         <Grid item xs={gridSize}>
@@ -29,23 +35,29 @@ const OrdersPage = () => {
               rowIdField={rowIdField}
               updateHook={updateHook}
               deleteHook={deleteHook}
+              loading={isPending}
               onRowSelection={(row) => setSelectedOrderId(row?.[rowIdField] ?? null)}
+              allowAdd={canCreate}
+              allowEdit={canEdit}
+              allowDelete={canDelete}
             />
           </Box>
         </Grid>
         {selectedOrder && (
           <Grid item xs={12 - gridSize}>
-            <OrderDetailsView 
+            <OrderDetailsView
               order={selectedOrder}
-              columnsDefinition={detailColumnsDefinition}
-              sampleRow={detailSampleRow}
-              rowIdField={detailRowIdField}
               orderUpdateHook={updateHook}
-              productUpdateHook={detailUpdateHook}
-              productDeleteHook={detailDeleteHook}
+              contactUpdateHook={contactUpdateHook}
+              recalculateHook={recalculateOrder}
               contactOptions={contactOptions}
               statusOptions={statusOptions}
               prioritiesOptions={prioritiesOptions}
+              contentsColumnsDefinition={contentsColumnsDefinition}
+              contentsSampleRow={contentsSampleRow}
+              contentsRowIdField={contentsRowIdField}
+              contentsUpdateHook={contentsUpdateHook}
+              contentsDeleteHook={contentsDeleteHook}
             />
           </Grid>
         )}

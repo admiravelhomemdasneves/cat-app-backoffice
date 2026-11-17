@@ -8,14 +8,21 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
 import CheckIcon from '@mui/icons-material/Check';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { tokens } from "../theme";
 import * as XLSX from 'xlsx';
 
-const DataTable = ({ 
-    gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook, 
-    onRowSelection, addRecordComponent = null, editRecordComponent = null, 
+const DataTable = ({
+    gridData, columnsDefinition, rowIdField, sampleRow, updateHook, deleteHook,
+    onRowSelection, addRecordComponent = null, editRecordComponent = null,
     allowRowEditOnGrid = true,
+    allowAdd = true,
+    allowEdit = true,
+    allowDelete = true,
+    allowDuplicate = true,
     initialSortModel = [],
+    loading = false,
+    autoHeight = false,
 }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -53,19 +60,28 @@ const DataTable = ({
                     ];
                 }
 
-                return [
-                    <GridActionsCellItem icon={<EditIcon />} label="Edit" className="textPrimary" onClick={handleEditClick(id)} color="inherit" />,
-                    <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />,
-                ];
+                const actions = [];
+                if (allowEdit) actions.push(
+                    <GridActionsCellItem key="edit" icon={<EditIcon />} label="Edit" className="textPrimary" onClick={handleEditClick(id)} color="inherit" />
+                );
+                if (allowAdd && allowDuplicate) actions.push(
+                    <GridActionsCellItem key="duplicate" icon={<ContentCopyIcon />} label="Duplicate" onClick={handleDuplicateClick(id)} color="inherit" />
+                );
+                if (allowDelete) actions.push(
+                    <GridActionsCellItem key="delete" icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />
+                );
+                return actions;
             },
         },
     ];
 
     const gridToolbar = () => (
         <GridToolbarContainer style={{ backgroundColor: colors.primary[500] }}>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRow} variant="outlined">
-                Add record
-            </Button>
+            {allowAdd && (
+                <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRow} variant="outlined">
+                    Add record
+                </Button>
+            )}
             <Box sx={{ flex: 1 }} />
             <GridToolbarColumnsButton />
             <GridToolbarFilterButton />
@@ -134,6 +150,13 @@ const DataTable = ({
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
 
+    const handleDuplicateClick = (id) => () => {
+        const row = rows.find((r) => r[rowIdField] === id);
+        if (!row) return;
+        const { [rowIdField]: _ignored, isNew: _isNew, ...rest } = row;
+        updateHook({ ...rest, [rowIdField]: null });
+    };
+
     const handleDeleteClick = (id) => () => {
         deleteHook(id);
     };
@@ -191,10 +214,12 @@ const DataTable = ({
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: autoHeight ? 'auto' : '100%' }}>
             <DataGrid
                 slots={{ toolbar: gridToolbar }}
                 apiRef={apiRef}
+                loading={loading}
+                autoHeight={autoHeight}
                 editMode="row"
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
@@ -209,7 +234,7 @@ const DataTable = ({
                     onRowSelection && onRowSelection(selectedRow || null);
                 }}
                 sx={{
-                    height: '100%',
+                    height: autoHeight ? undefined : '100%',
                     backgroundColor: colors.primary[500],
                     '.MuiDataGrid-footerContainer': { backgroundColor: colors.primary[500] },
                     '.MuiDataGrid-row': { backgroundColor: alpha(colors.primary[500], 0.6) },
