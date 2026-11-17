@@ -56,10 +56,7 @@ const Services = {
   PUT_ID_PRINTING_SERVICE : `/printingService`,
   INACTIVATE_PRINTING_SERVICE : `/printingService/inactivate`,
   
-  GET_ALL_ORDERS : `/order`,
-  GET_ID_ORDER : `/order`,
-  ORDER_INACTIVATE : `/order/inactivate`,
-  PUT_ID_ORDER : `/order`,
+  ORDER_INACTIVATE : "/bo/orders/inactivate",
 
   GET_ALL_MATERIALS:   `/material`,
   SAVE_MATERIAL:       `/material`,
