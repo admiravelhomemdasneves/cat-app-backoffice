@@ -25,7 +25,8 @@ export const CompanySettingsStore = () => {
 
     const handleSaveCompany = async () => {
         try {
-            await updateCompanyMutation.mutateAsync({ ...company, ...companyForm });
+            // Only the editable fields: the backend always updates the user's own company.
+            await updateCompanyMutation.mutateAsync(companyForm);
             showSnack("Company info saved.");
         } catch {
             showSnack("Failed to save company info.", "error");
