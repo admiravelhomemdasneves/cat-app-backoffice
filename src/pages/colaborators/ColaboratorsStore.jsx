@@ -3,23 +3,21 @@ import { useGetUsers } from "../../api/users/getUsers";
 import { useCreateUser } from "../../api/users/createUser";
 import { useUpdateAccessLevel } from "../../api/users/updateAccessLevel";
 import { useInactivateUser } from "../../api/users/inactivateUser";
-import { useGetCurrentUser } from "../../api/users/getCurrentUser";
 
 export const ColaboratorsStore = () => {
     const { data: gridData, isPending } = useGetUsers();
-    const { data: currentUser } = useGetCurrentUser();
     const { mutate: createUserMutate } = useCreateUser();
     const { mutate: updateAccessLevelMutate } = useUpdateAccessLevel();
     const { mutate: inactivateUserMutate } = useInactivateUser();
 
     const updateHook = (userData) => {
         if (userData.isNew) {
+            // No companyId: the backend always creates the user in the creator's own company.
             createUserMutate({
                 username: userData.username,
                 email: userData.email,
                 password: userData.password,
                 accessLevelId: userData.accessLevelId,
-                companyId: currentUser?.companyId,
             });
         } else {
             updateAccessLevelMutate({ userId: userData.id, accessLevelId: userData.accessLevelId });
